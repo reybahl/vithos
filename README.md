@@ -19,8 +19,11 @@ Then run `pnpm run build` and `pnpm run lint` from the root to confirm the works
 ## Structure
 
 - `apps/web` — Vite + React (TypeScript) SPA
-- `packages/eslint-config` — shared **legacy** ESLint config (ESLint 8) for other workspace packages. The web app uses its own **ESLint 10** flat `eslint.config.js` from the Vite template so it stays aligned with the official React stack.
-- `packages/typescript-config` — shared `tsconfig` presets for libraries or future packages. The web app keeps the official Vite React `tsconfig` layout (`tsconfig.json` + `tsconfig.app.json` + `tsconfig.node.json`).
+- `packages/*` — app and library code (empty until you add packages)
+- `tooling/eslint` — workspace package `@repo/eslint` (ESLint 8) for roots and other consumers that use legacy `.eslintrc` style. The web app uses its own **ESLint 10** flat `eslint.config.js` from the Vite template.
+- `tooling/typescript` — workspace package `@repo/typescript` with shared `base.json` / `vite.json` for libraries or new packages. The web app keeps the official Vite React `tsconfig` layout (`tsconfig.json` + `tsconfig.app.json` + `tsconfig.node.json`).
+
+`pnpm-workspace.yaml` includes `apps/*`, `packages/*`, and `tooling/*` (same “tooling is dev presets, packages is product code” split as in [create-t3-turbo](https://github.com/t3-oss/create-t3-turbo)).
 
 ## Commands
 

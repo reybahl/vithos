@@ -1,7 +1,8 @@
 {
-  "name": "@repo/eslint-config",
+  "name": "@repo/eslint",
   "version": "0.0.0",
   "main": "index.js",
+  "private": true,
   "license": "MIT",
   "dependencies": {
     "@typescript-eslint/eslint-plugin": "^7.1.0",
