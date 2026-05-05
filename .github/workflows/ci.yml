@@ -10,7 +10,6 @@ env:
 
 jobs:
   format:
-    name: Check Format
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -25,7 +24,6 @@ jobs:
       - run: pnpm format
 
   typecheck:
-    name: Typecheck
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -40,7 +38,6 @@ jobs:
       - run: pnpm typecheck
 
   lint:
-    name: Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
