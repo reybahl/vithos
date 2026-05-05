@@ -21,6 +21,8 @@
   "packageManager": "pnpm@8.15.6",
   "name": "vithos-stack",
   "lint-staged": {
-    "*.{ts,tsx,md}": ["prettier --write"]
+    "*.{js,mjs,cjs,ts,tsx,mts,cts,jsx,json,css,scss,md,mdx,yml,yaml,html}": [
+      "prettier --write"
+    ]
   }
 }
