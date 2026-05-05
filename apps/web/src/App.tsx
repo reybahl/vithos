@@ -1,10 +1,10 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
+import { useState } from "react";
+import reactLogo from "./assets/react.svg";
+import viteLogo from "./assets/vite.svg";
+import heroImg from "./assets/hero.png";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
 
   return (
     <div className="min-h-dvh text-neutral-800 antialiased [color-scheme:light_dark]">
@@ -32,7 +32,10 @@ function App() {
               vithos
             </h1>
             <p className="mt-2 text-lg text-neutral-600">
-              Edit <code className="rounded bg-neutral-100 px-1.5 py-0.5 font-mono text-sm">src/App.tsx</code>{' '}
+              Edit{" "}
+              <code className="rounded bg-neutral-100 px-1.5 py-0.5 font-mono text-sm">
+                src/App.tsx
+              </code>{" "}
               and save to test HMR
             </p>
             <button
@@ -63,7 +66,7 @@ function App() {
         </section>
       </div>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

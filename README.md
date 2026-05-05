@@ -27,11 +27,11 @@ Then run `pnpm run build` and `pnpm run lint` from the root to confirm the works
 
 ## Commands
 
-| Command        | Description              |
-| -------------- | ------------------------ |
-| `pnpm dev`     | Run all `dev` tasks      |
-| `pnpm build`   | Build all apps/packages  |
-| `pnpm lint`    | Lint (currently `web`)   |
+| Command      | Description             |
+| ------------ | ----------------------- |
+| `pnpm dev`   | Run all `dev` tasks     |
+| `pnpm build` | Build all apps/packages |
+| `pnpm lint`  | Lint (currently `web`)  |
 
 ## Package manager
 
