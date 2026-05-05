@@ -29,7 +29,7 @@ function App() {
           </div>
           <div>
             <h1 className="text-3xl font-semibold text-neutral-950 sm:text-4xl">
-              Get started
+              vithos
             </h1>
             <p className="mt-2 text-lg text-neutral-600">
               Edit <code className="rounded bg-neutral-100 px-1.5 py-0.5 font-mono text-sm">src/App.tsx</code>{' '}
@@ -47,62 +47,20 @@ function App() {
 
         <div className="mb-6 h-2 bg-[repeating-linear-gradient(90deg,transparent,transparent_4px,currentColor_4px,currentColor_8px)] text-neutral-200" />
 
-        <div className="grid gap-8 sm:grid-cols-2">
-          <section className="rounded-xl border border-neutral-200/80 bg-neutral-50/50 p-6 shadow-sm">
-            <h2 className="text-lg font-semibold">Documentation</h2>
-            <p className="mt-1 text-neutral-600">Your questions, answered</p>
-            <ul className="mt-4 space-y-2 text-sm">
-              <li>
-                <a
-                  className="inline-flex items-center gap-2 text-violet-600 hover:underline"
-                  href="https://vite.dev/"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <img src={viteLogo} className="h-4 w-4" alt="" />
-                  Explore Vite
-                </a>
-              </li>
-              <li>
-                <a
-                  className="inline-flex items-center gap-2 text-violet-600 hover:underline"
-                  href="https://react.dev/"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <img src={reactLogo} className="h-4 w-4" alt="" />
-                  Learn more
-                </a>
-              </li>
-            </ul>
-          </section>
-          <section className="rounded-xl border border-neutral-200/80 bg-neutral-50/50 p-6 shadow-sm">
-            <h2 className="text-lg font-semibold">Connect</h2>
-            <p className="mt-1 text-neutral-600">Join the Vite community</p>
-            <ul className="mt-4 space-y-2 text-sm">
-              <li>
-                <a
-                  className="text-violet-600 hover:underline"
-                  href="https://github.com/vitejs/vite"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  GitHub
-                </a>
-              </li>
-              <li>
-                <a
-                  className="text-violet-600 hover:underline"
-                  href="https://chat.vite.dev/"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Discord
-                </a>
-              </li>
-            </ul>
-          </section>
-        </div>
+        <section className="mx-auto max-w-xl rounded-xl border border-neutral-200/80 bg-neutral-50/50 p-6 shadow-sm">
+          <h2 className="text-lg font-semibold">Repository</h2>
+          <p className="mt-1 text-neutral-600">Source for this project</p>
+          <div className="mt-4">
+            <a
+              className="inline-flex items-center gap-2 font-mono text-sm text-violet-600 hover:underline"
+              href="https://github.com/reybahl/vithos"
+              target="_blank"
+              rel="noreferrer"
+            >
+              reybahl/vithos
+            </a>
+          </div>
+        </section>
       </div>
     </div>
   )
