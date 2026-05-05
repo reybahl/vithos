@@ -5,8 +5,8 @@
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
-    "format": "prettier --check \"**/*.{ts,tsx,md}\"",
-    "format:fix": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "format": "prettier --check \"**/*.{js,mjs,cjs,ts,tsx,mts,cts,jsx,json,css,scss,md,mdx,yml,yaml,html}\"",
+    "format:fix": "prettier --write \"**/*.{js,mjs,cjs,ts,tsx,mts,cts,jsx,json,css,scss,md,mdx,yml,yaml,html}\"",
     "lint-staged": "lint-staged",
     "prepare": "husky"
   },
