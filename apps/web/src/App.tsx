@@ -1,10 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "./assets/vite.svg";
 import heroImg from "./assets/hero.png";
+import { apiClient } from "./lib/api-client";
 
 function App() {
   const [count, setCount] = useState(0);
+  const [health, setHealth] = useState<{ ok: true } | "error" | null>(null);
+
+  useEffect(() => {
+    void (async () => {
+      try {
+        const res = await apiClient.api.health.$get();
+        if (!res.ok) {
+          setHealth("error");
+          return;
+        }
+        setHealth(await res.json());
+      } catch {
+        setHealth("error");
+      }
+    })();
+  }, []);
 
   return (
     <div className="min-h-dvh text-neutral-800 antialiased [color-scheme:light_dark]">
@@ -37,6 +54,17 @@ function App() {
                 src/App.tsx
               </code>{" "}
               and save to test HMR
+            </p>
+            <p className="mt-2 font-mono text-sm text-neutral-500">
+              API{" "}
+              <code className="rounded bg-neutral-100 px-1">/api/health</code>:{" "}
+              {health === null
+                ? "loading…"
+                : health === "error"
+                  ? "unreachable (start apps/api)"
+                  : health.ok
+                    ? "ok"
+                    : "bad response"}
             </p>
             <button
               type="button"
