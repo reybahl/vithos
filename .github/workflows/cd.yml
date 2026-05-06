@@ -19,7 +19,20 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm --filter web build
+      - name: Deploy API (Cloudflare Worker)
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          packageManager: pnpm
+          workingDirectory: apps/worker
+          command: deploy
+      - name: Build web
+        run: pnpm --filter web build
+        env:
+          # Optional repo variable: full Worker URL with trailing slash, e.g. https://vithos-api.<account>.workers.dev/
+          # Omit until the first Worker deploy; then set in repo Settings → Variables (or Cloudflare Pages env).
+          VITE_API_URL: ${{ vars.WORKER_URL }}
       - uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}

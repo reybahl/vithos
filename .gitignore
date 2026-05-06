@@ -7,5 +7,6 @@ dist-ssr
 *.local
 .env
 .cache
+.wrangler
 server/dist
 public/dist
