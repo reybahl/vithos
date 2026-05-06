@@ -1,0 +1,16 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// Singleton row: use `id = 1` as the global all-time click counter.
+model ClickCounter {
+  id     Int @id // always `1` in app code
+  clicks Int @default(0)
+
+  @@map("click_counter")
+}
