@@ -9,6 +9,6 @@ serve(
     port,
   },
   (info) => {
-    console.log(`Listening on http://localhost:${info.port}`);
+    console.log(`Listening on port ${info.port}`);
   },
 );
