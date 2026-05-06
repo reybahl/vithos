@@ -24,7 +24,7 @@ importers:
         version: 2.9.6
       wrangler:
         specifier: ^4.88.0
-        version: 4.88.0
+        version: 4.88.0(@cloudflare/workers-types@4.20260506.1)
 
   apps/api:
     dependencies:
@@ -120,6 +120,37 @@ importers:
       vite:
         specifier: ^8.0.10
         version: 8.0.10(@types/node@24.12.2)
+
+  apps/worker:
+    dependencies:
+      "@repo/hono-app":
+        specifier: workspace:*
+        version: link:../../packages/hono-app
+      hono:
+        specifier: ^4.11.3
+        version: 4.12.17
+    devDependencies:
+      "@cloudflare/workers-types":
+        specifier: ^4.20250615.0
+        version: 4.20260506.1
+      "@eslint/js":
+        specifier: ^10.0.1
+        version: 10.0.1(eslint@10.2.1)
+      eslint:
+        specifier: ^10.2.1
+        version: 10.2.1
+      globals:
+        specifier: ^17.5.0
+        version: 17.5.0
+      typescript:
+        specifier: ~6.0.2
+        version: 6.0.3
+      typescript-eslint:
+        specifier: ^8.58.2
+        version: 8.59.0(eslint@10.2.1)(typescript@6.0.3)
+      wrangler:
+        specifier: ^4.88.0
+        version: 4.88.0(@cloudflare/workers-types@4.20260506.1)
 
   packages/hono-app:
     dependencies:
@@ -448,6 +479,13 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  /@cloudflare/workers-types@4.20260506.1:
+    resolution:
+      {
+        integrity: sha512-IKv/C08utEbAqEu2zr0/3CMf1MbYrl7x0Z1UsrnMs4xxfIN81vtGTRduCZb7xJQpaICQPe0Sa6fhHlZmUXrMjw==,
+      }
+    dev: true
 
   /@cspotcode/source-map-support@0.8.1:
     resolution:
@@ -4792,7 +4830,7 @@ packages:
       "@cloudflare/workerd-windows-64": 1.20260504.1
     dev: true
 
-  /wrangler@4.88.0:
+  /wrangler@4.88.0(@cloudflare/workers-types@4.20260506.1):
     resolution:
       {
         integrity: sha512-f470QwbeT/JM1S0duq+sLtkss7UBxIFDtYHgujv9tdQUyA/dLGDq51am0rqrsuFtCi97lTM1P5sqtt8xra1AlA==,
@@ -4807,6 +4845,7 @@ packages:
     dependencies:
       "@cloudflare/kv-asset-handler": 0.5.0
       "@cloudflare/unenv-preset": 2.16.1(unenv@2.0.0-rc.24)(workerd@1.20260504.1)
+      "@cloudflare/workers-types": 4.20260506.1
       blake3-wasm: 2.1.5
       esbuild: 0.27.3
       miniflare: 4.20260504.0

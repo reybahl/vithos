@@ -1,0 +1,25 @@
+{
+  "name": "worker",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@repo/hono-app": "workspace:*",
+    "hono": "^4.11.3"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250615.0",
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.2.1",
+    "globals": "^17.5.0",
+    "typescript": "~6.0.2",
+    "typescript-eslint": "^8.58.2",
+    "wrangler": "^4.88.0"
+  }
+}
