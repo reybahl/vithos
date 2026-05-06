@@ -1,14 +1,16 @@
-name: cd
+name: CD
 
 on:
   push:
     branches: [main]
 
+env:
+  CF_PAGES_PROJECT_NAME: vithos
+
 jobs:
-  deploy:
+  worker:
+    name: Backend (Worker)
     runs-on: ubuntu-latest
-    env:
-      CF_PAGES_PROJECT_NAME: vithos
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -19,7 +21,7 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - name: Deploy API (Cloudflare Worker)
+      - name: Deploy Cloudflare Worker
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -27,13 +29,28 @@ jobs:
           packageManager: pnpm
           workingDirectory: apps/worker
           command: deploy
+
+  pages:
+    name: Frontend (Pages)
+    runs-on: ubuntu-latest
+    needs: [worker]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.6
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
       - name: Build web
         run: pnpm --filter web build
         env:
-          # Optional repo variable: full Worker URL with trailing slash, e.g. https://vithos-api.<account>.workers.dev/
-          # Omit until the first Worker deploy; then set in repo Settings → Variables (or Cloudflare Pages env).
+          # Repo variable: Worker origin with trailing slash, e.g. https://vithos-api.<account>.workers.dev/
           VITE_API_URL: ${{ vars.WORKER_URL }}
-      - uses: cloudflare/wrangler-action@v3
+      - name: Deploy Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
