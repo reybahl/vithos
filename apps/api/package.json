@@ -4,9 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
+    "with-env": "dotenv -e .env --",
+    "dev": "pnpm with-env tsx watch src/index.ts",
     "build": "esbuild src/index.ts --bundle --platform=node --format=esm --outfile=dist/index.js",
-    "start": "node dist/index.js",
+    "start": "pnpm with-env node dist/index.js",
     "typecheck": "tsc --noEmit",
     "lint": "eslint ."
   },
@@ -21,6 +22,7 @@
     "esbuild": "^0.27.2",
     "eslint": "^10.2.1",
     "globals": "^17.5.0",
+    "dotenv-cli": "^8.0.0",
     "tsx": "^4.21.0",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.58.2"
