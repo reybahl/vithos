@@ -5,7 +5,9 @@ import heroImg from "./assets/hero.png";
 import { apiClient } from "./lib/api-client";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState<number | null>(null);
+  const [counterError, setCounterError] = useState(false);
+  const [incrementing, setIncrementing] = useState(false);
   const [health, setHealth] = useState<{ ok: true } | "error" | null>(null);
 
   useEffect(() => {
@@ -22,6 +24,38 @@ function App() {
       }
     })();
   }, []);
+
+  useEffect(() => {
+    void (async () => {
+      try {
+        const res = await apiClient.api.counter.$get();
+        if (!res.ok) {
+          setCounterError(true);
+          return;
+        }
+        const body = await res.json();
+        setCount(body.count);
+        setCounterError(false);
+      } catch {
+        setCounterError(true);
+      }
+    })();
+  }, []);
+
+  async function incrementCounter() {
+    setIncrementing(true);
+    try {
+      const res = await apiClient.api.counter.increment.$post();
+      if (!res.ok) return;
+      const body = await res.json();
+      setCount(body.count);
+      setCounterError(false);
+    } catch {
+      setCounterError(true);
+    } finally {
+      setIncrementing(false);
+    }
+  }
 
   return (
     <div className="min-h-dvh text-neutral-800 antialiased [color-scheme:light_dark]">
@@ -68,10 +102,16 @@ function App() {
             </p>
             <button
               type="button"
-              className="mt-4 rounded-lg border border-violet-500/50 bg-violet-500/10 px-4 py-2 font-medium text-violet-800 transition hover:border-violet-500"
-              onClick={() => setCount((c) => c + 1)}
+              disabled={(count === null && !counterError) || incrementing}
+              className="mt-4 rounded-lg border border-violet-500/50 bg-violet-500/10 px-4 py-2 font-medium text-violet-800 transition hover:border-violet-500 disabled:cursor-not-allowed disabled:opacity-50"
+              onClick={() => void incrementCounter()}
             >
-              Count is {count}
+              Count is{" "}
+              {count === null && !counterError
+                ? "loading…"
+                : counterError
+                  ? "unreachable"
+                  : count}
             </button>
           </div>
         </div>

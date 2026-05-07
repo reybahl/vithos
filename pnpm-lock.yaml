@@ -188,6 +188,9 @@ importers:
 
   packages/hono-app:
     dependencies:
+      "@repo/db":
+        specifier: workspace:*
+        version: link:../db
       hono:
         specifier: ^4.11.3
         version: 4.12.17

@@ -15,6 +15,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@repo/db": "workspace:*",
     "hono": "^4.11.3"
   },
   "devDependencies": {
