@@ -2,13 +2,15 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 
 import { auth } from "@repo/auth";
+import { loadSession, type AuthVariables } from "./auth-middleware";
 import { counterRouter } from "./routes/counter";
 
 const authCorsOrigin = process.env.WEB_ORIGIN ?? "http://localhost:5173";
 
 export function createApp() {
-  return new Hono()
+  return new Hono<{ Variables: AuthVariables }>()
     .basePath("/api")
+    .use("*", loadSession)
     .use(
       "/auth/*",
       cors({
@@ -25,7 +27,6 @@ export function createApp() {
     .route("/counter", counterRouter);
 }
 
-/** Single instance for type inference (`AppType`) and the Node runner. */
 export const app = createApp();
 
 export type AppType = typeof app;

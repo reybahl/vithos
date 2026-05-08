@@ -12,4 +12,8 @@ function apiBaseUrl(): string {
   return `${window.location.origin}/`;
 }
 
-export const apiClient = hc<AppType>(apiBaseUrl());
+export const apiClient = hc<AppType>(apiBaseUrl(), {
+  init: {
+    credentials: "include", // Required for sending cookies cross-origin
+  },
+});
