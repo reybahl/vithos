@@ -4,7 +4,7 @@ import {
   createRoute,
   createRouter,
 } from "@tanstack/react-router";
-import { HomePage } from "./pages/home-page";
+import { HomePage } from "./pages/home";
 
 const rootRoute = createRootRoute({
   component: () => <Outlet />,
