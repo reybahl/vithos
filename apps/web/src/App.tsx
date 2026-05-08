@@ -1,4 +1,13 @@
 import { useEffect, useState } from "react";
+import { Button } from "@repo/ui/components/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@repo/ui/components/card";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "./assets/vite.svg";
 import heroImg from "./assets/hero.png";
@@ -100,10 +109,11 @@ function App() {
                     ? "ok"
                     : "bad response"}
             </p>
-            <button
+            <Button
               type="button"
+              variant="secondary"
+              className="mt-4"
               disabled={(count === null && !counterError) || incrementing}
-              className="mt-4 rounded-lg border border-violet-500/50 bg-violet-500/10 px-4 py-2 font-medium text-violet-800 transition hover:border-violet-500 disabled:cursor-not-allowed disabled:opacity-50"
               onClick={() => void incrementCounter()}
             >
               Count is{" "}
@@ -112,16 +122,18 @@ function App() {
                 : counterError
                   ? "unreachable"
                   : count}
-            </button>
+            </Button>
           </div>
         </div>
 
         <div className="mb-6 h-2 bg-[repeating-linear-gradient(90deg,transparent,transparent_4px,currentColor_4px,currentColor_8px)] text-neutral-200" />
 
-        <section className="mx-auto max-w-xl rounded-xl border border-neutral-200/80 bg-neutral-50/50 p-6 shadow-sm">
-          <h2 className="text-lg font-semibold">Repository</h2>
-          <p className="mt-1 text-neutral-600">Source for this project</p>
-          <div className="mt-4">
+        <Card className="mx-auto max-w-xl border-neutral-200/80 bg-neutral-50/50 shadow-sm">
+          <CardHeader>
+            <CardTitle className="text-lg">Repository</CardTitle>
+            <CardDescription>Source for this project</CardDescription>
+          </CardHeader>
+          <CardContent>
             <a
               className="inline-flex items-center gap-2 font-mono text-sm text-violet-600 hover:underline"
               href="https://github.com/reybahl/vithos"
@@ -130,8 +142,12 @@ function App() {
             >
               reybahl/vithos
             </a>
-          </div>
-        </section>
+          </CardContent>
+          <CardFooter className="text-xs text-muted-foreground">
+            Components from{" "}
+            <code className="rounded bg-muted px-1">@repo/ui</code>
+          </CardFooter>
+        </Card>
       </div>
     </div>
   );
