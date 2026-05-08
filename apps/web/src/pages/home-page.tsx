@@ -8,12 +8,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "./assets/vite.svg";
-import heroImg from "./assets/hero.png";
-import { apiClient } from "./lib/api-client";
+import reactLogo from "../assets/react.svg";
+import viteLogo from "../assets/vite.svg";
+import heroImg from "../assets/hero.png";
+import { apiClient } from "../lib/api-client";
 
-function App() {
+export function HomePage() {
   const [count, setCount] = useState<number | null>(null);
   const [counterError, setCounterError] = useState(false);
   const [incrementing, setIncrementing] = useState(false);
@@ -94,7 +94,7 @@ function App() {
             <p className="mt-2 text-lg text-neutral-600">
               Edit{" "}
               <code className="rounded bg-neutral-100 px-1.5 py-0.5 font-mono text-sm">
-                src/App.tsx
+                src/pages/home-page.tsx
               </code>{" "}
               and save to test HMR
             </p>
@@ -152,5 +152,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
