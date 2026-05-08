@@ -7,7 +7,7 @@ import { cn } from "@repo/ui/lib/utils";
 
 import { AuthFormHeader, AuthGoogleOAuthSection } from "./auth-shared";
 
-export function LoginForm({
+export function SignupForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
@@ -18,35 +18,31 @@ export function LoginForm({
       onSubmit={(e) => e.preventDefault()}
     >
       <AuthFormHeader
-        title="Login to your account"
-        description="Enter your email below to login to your account"
+        title="Create an account"
+        description="Enter your details below to create your account"
       />
       <div className="grid gap-6">
         <div className="grid gap-2">
-          <Label htmlFor="login-email">Email</Label>
-          <Input id="login-email" type="email" placeholder="m@example.com" />
+          <Label htmlFor="signup-email">Email</Label>
+          <Input id="signup-email" type="email" placeholder="m@example.com" />
         </div>
         <div className="grid gap-2">
-          <div className="flex items-center gap-2">
-            <Label htmlFor="login-password">Password</Label>
-            <a
-              href="#"
-              className="text-muted-foreground ml-auto text-xs font-medium underline-offset-4 hover:underline"
-            >
-              Forgot your password?
-            </a>
-          </div>
-          <Input id="login-password" type="password" />
+          <Label htmlFor="signup-password">Password</Label>
+          <Input id="signup-password" type="password" />
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="signup-confirm">Confirm password</Label>
+          <Input id="signup-confirm" type="password" />
         </div>
         <Button type="submit" variant="default" className="w-full">
-          Login
+          Create account
         </Button>
         <AuthGoogleOAuthSection />
       </div>
       <div className="text-center text-sm">
-        Don&apos;t have an account?{" "}
-        <Link to="/signup" className="underline underline-offset-4">
-          Sign up
+        Already have an account?{" "}
+        <Link to="/signin" className="underline underline-offset-4">
+          Sign in
         </Link>
       </div>
     </form>

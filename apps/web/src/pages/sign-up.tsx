@@ -1,10 +1,10 @@
 import { AuthSplitLayout } from "../components/auth-split-layout";
-import { LoginForm } from "../components/login-form";
+import { SignupForm } from "../components/signup-form";
 
-export function SignInPage() {
+export function SignUpPage() {
   return (
     <AuthSplitLayout>
-      <LoginForm />
+      <SignupForm />
     </AuthSplitLayout>
   );
 }
