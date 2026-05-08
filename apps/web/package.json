@@ -12,6 +12,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "next-themes": "^0.4.6",
     "better-auth": "^1.6.9",
     "@repo/hono-app": "workspace:*",
     "@repo/ui": "workspace:*",

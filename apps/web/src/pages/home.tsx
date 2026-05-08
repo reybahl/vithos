@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button } from "@repo/ui/components/button";
+import { toast } from "@repo/ui/components/sonner";
 import {
   Card,
   CardContent,
@@ -59,6 +60,9 @@ export function HomePage() {
       const body = await res.json();
       setCount(body.count);
       setCounterError(false);
+      toast.success("Count updated", {
+        description: `New value: ${body.count}`,
+      });
     } catch {
       setCounterError(true);
     } finally {
