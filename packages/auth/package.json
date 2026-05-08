@@ -1,23 +1,22 @@
 {
-  "name": "@repo/hono-app",
+  "name": "@repo/auth",
   "version": "0.0.0",
   "private": true,
   "type": "module",
   "exports": {
-    "./app": {
-      "types": "./src/app.ts",
-      "import": "./src/app.ts",
-      "default": "./src/app.ts"
+    ".": {
+      "types": "./src/auth.ts",
+      "import": "./src/auth.ts",
+      "default": "./src/auth.ts"
     }
   },
   "scripts": {
-    "typecheck": "tsc --noEmit",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@repo/auth": "workspace:*",
     "@repo/db": "workspace:*",
-    "hono": "^4.11.3"
+    "better-auth": "^1.6.9"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

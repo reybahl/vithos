@@ -1,30 +1,72 @@
-import type * as React from "react";
-import { Link } from "@tanstack/react-router";
+import * as React from "react";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { Button } from "@repo/ui/components/button";
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
 import { cn } from "@repo/ui/lib/utils";
 
+import { authClient } from "../lib/auth-client";
 import { AuthFormHeader } from "./auth-shared";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
+  const navigate = useNavigate();
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
+  const [isPending, setIsPending] = React.useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setErrorMessage(null);
+    setIsPending(true);
+    try {
+      const { error } = await authClient.signIn.email({
+        email: email.trim(),
+        password,
+        callbackURL: "/",
+      });
+      if (error) {
+        setErrorMessage(error.message ?? "Could not sign in.");
+        return;
+      }
+      void navigate({ to: "/" });
+    } finally {
+      setIsPending(false);
+    }
+  };
+
   return (
     <form
       className={cn("grid gap-6", className)}
       {...props}
-      onSubmit={(e) => e.preventDefault()}
+      onSubmit={handleSubmit}
     >
       <AuthFormHeader
         title="Login to your account"
         description="Enter your email below to login to your account"
       />
       <div className="grid gap-6">
+        {errorMessage ? (
+          <p role="alert" className="text-destructive text-sm font-medium">
+            {errorMessage}
+          </p>
+        ) : null}
         <div className="grid gap-2">
           <Label htmlFor="login-email">Email</Label>
-          <Input id="login-email" type="email" placeholder="m@example.com" />
+          <Input
+            id="login-email"
+            name="email"
+            type="email"
+            autoComplete="email"
+            placeholder="m@example.com"
+            value={email}
+            onChange={(ev) => setEmail(ev.target.value)}
+            disabled={isPending}
+            required
+          />
         </div>
         <div className="grid grid-cols-[1fr_auto] gap-2">
           <Label
@@ -35,8 +77,14 @@ export function LoginForm({
           </Label>
           <Input
             id="login-password"
+            name="password"
             type="password"
+            autoComplete="current-password"
             className="col-span-2 col-start-1 row-start-2 min-w-0"
+            value={password}
+            onChange={(ev) => setPassword(ev.target.value)}
+            disabled={isPending}
+            required
           />
           <a
             href="#"
@@ -45,8 +93,13 @@ export function LoginForm({
             Forgot your password?
           </a>
         </div>
-        <Button type="submit" variant="default" className="w-full">
-          Login
+        <Button
+          type="submit"
+          variant="default"
+          className="w-full"
+          disabled={isPending}
+        >
+          {isPending ? "Signing in…" : "Login"}
         </Button>
       </div>
       <div className="text-center text-sm">

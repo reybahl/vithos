@@ -12,6 +12,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "better-auth": "^1.6.9",
     "@repo/hono-app": "workspace:*",
     "@repo/ui": "workspace:*",
     "@tanstack/react-router": "^1.169.2",
