@@ -5,7 +5,7 @@ import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
 import { cn } from "@repo/ui/lib/utils";
 
-import { AuthFormHeader, AuthGoogleOAuthSection } from "./auth-shared";
+import { AuthFormHeader } from "./auth-shared";
 
 export function SignupForm({
   className,
@@ -37,7 +37,6 @@ export function SignupForm({
         <Button type="submit" variant="default" className="w-full">
           Create account
         </Button>
-        <AuthGoogleOAuthSection />
       </div>
       <div className="text-center text-sm">
         Already have an account?{" "}
