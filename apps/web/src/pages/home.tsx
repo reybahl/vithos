@@ -67,7 +67,7 @@ export function HomePage() {
   }
 
   return (
-    <div className="min-h-dvh text-neutral-800 antialiased [color-scheme:light_dark]">
+    <div className="min-h-dvh text-neutral-800 antialiased scheme-light-dark">
       <div className="mx-auto max-w-4xl px-6 py-12">
         <div className="mb-10 flex flex-col items-center justify-center gap-6 text-center sm:flex-row sm:text-left">
           <div className="relative h-[179px] w-[170px] shrink-0">
