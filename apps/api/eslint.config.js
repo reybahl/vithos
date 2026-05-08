@@ -10,6 +10,9 @@ export default defineConfig([
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     languageOptions: {
       globals: { ...globals.es2023, ...globals.node },
+      parserOptions: {
+        tsconfigRootDir: import.meta.dirname,
+      },
     },
   },
 ]);
