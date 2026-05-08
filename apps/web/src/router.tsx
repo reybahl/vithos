@@ -5,6 +5,7 @@ import {
   createRouter,
 } from "@tanstack/react-router";
 import { HomePage } from "./pages/home";
+import { SignInPage } from "./pages/sign-in";
 
 const rootRoute = createRootRoute({
   component: () => <Outlet />,
@@ -16,7 +17,13 @@ const indexRoute = createRoute({
   component: HomePage,
 });
 
-const routeTree = rootRoute.addChildren([indexRoute]);
+const signInRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/signin",
+  component: SignInPage,
+});
+
+const routeTree = rootRoute.addChildren([indexRoute, signInRoute]);
 
 export const router = createRouter({ routeTree });
 
