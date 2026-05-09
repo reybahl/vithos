@@ -37,7 +37,7 @@ export function SignupForm({
         name: name.trim(),
         email: email.trim(),
         password,
-        callbackURL: "/",
+        callbackURL: "/dashboard",
       });
       if (error) {
         setErrorMessage(error.message ?? "Could not create account.");
@@ -46,7 +46,7 @@ export function SignupForm({
       if (redirectTo) {
         router.history.push(redirectTo);
       } else {
-        void navigate({ to: "/" });
+        void navigate({ to: "/dashboard" });
       }
     } finally {
       setIsPending(false);

@@ -65,13 +65,18 @@ import {
   useSidebar,
 } from "@repo/ui/components/sidebar";
 
-// This is sample data.
+import { authClient } from "../lib/auth-client";
+
+function initialsFromName(name: string) {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length >= 2) {
+    return `${parts[0]![0]!}${parts[1]![0]!}`.toUpperCase();
+  }
+  return (name.slice(0, 2) || "?").toUpperCase();
+}
+
+// Sample data (nav structure).
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   teams: [
     {
       name: "Acme Inc",
@@ -408,8 +413,12 @@ function NavUser({
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton size="lg">
               <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                {user.avatar ? (
+                  <AvatarImage src={user.avatar} alt={user.name} />
+                ) : null}
+                <AvatarFallback className="rounded-lg">
+                  {initialsFromName(user.name)}
+                </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{user.name}</span>
@@ -428,8 +437,12 @@ function NavUser({
               <DropdownMenuLabel className="p-0 font-normal">
                 <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                   <Avatar className="h-8 w-8 rounded-lg">
-                    <AvatarImage src={user.avatar} alt={user.name} />
-                    <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                    {user.avatar ? (
+                      <AvatarImage src={user.avatar} alt={user.name} />
+                    ) : null}
+                    <AvatarFallback className="rounded-lg">
+                      {initialsFromName(user.name)}
+                    </AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-medium">{user.name}</span>
@@ -478,6 +491,14 @@ export function AppSidebar({
   children,
   ...props
 }: React.ComponentProps<typeof Sidebar> & { children?: React.ReactNode }) {
+  const session = authClient.useSession();
+  const u = session.data?.user;
+  const navUser = {
+    name: u?.name ?? "Guest",
+    email: u?.email ?? "",
+    avatar: typeof u?.image === "string" ? u.image : "",
+  };
+
   return (
     <SidebarProvider>
       <Sidebar collapsible="icon" {...props}>
@@ -489,7 +510,7 @@ export function AppSidebar({
           <NavProjects projects={data.projects} />
         </SidebarContent>
         <SidebarFooter>
-          <NavUser user={data.user} />
+          <NavUser user={navUser} />
         </SidebarFooter>
         <SidebarRail />
       </Sidebar>

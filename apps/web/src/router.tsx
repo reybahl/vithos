@@ -98,14 +98,17 @@ const signUpRoute = createRoute({
 });
 
 const dashboardRoute = createRoute({
-  getParentRoute: () => authenticatedLayoutRoute,
+  getParentRoute: () => rootRoute,
   path: "/dashboard",
   component: DashboardPage,
 });
 
 const routeTree = rootRoute.addChildren([
   indexRoute,
-  authenticatedLayoutRoute.addChildren([dashboardRoute]),
+  dashboardRoute,
+  authenticatedLayoutRoute.addChildren([
+    // e.g. createRoute({ getParentRoute: () => authenticatedLayoutRoute, path: '/settings', ... })
+  ]),
   signInRoute,
   signUpRoute,
 ]);

@@ -28,7 +28,7 @@ export function LoginForm({
       const { error } = await authClient.signIn.email({
         email: email.trim(),
         password,
-        callbackURL: "/",
+        callbackURL: "/dashboard",
       });
       if (error) {
         setErrorMessage(error.message ?? "Could not sign in.");
@@ -37,7 +37,7 @@ export function LoginForm({
       if (redirectTo) {
         router.history.push(redirectTo);
       } else {
-        void navigate({ to: "/" });
+        void navigate({ to: "/dashboard" });
       }
     } finally {
       setIsPending(false);
