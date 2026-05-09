@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate, useRouter } from "@tanstack/react-router";
 import { Button } from "@repo/ui/components/button";
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
@@ -10,9 +10,11 @@ import { AuthFormHeader } from "./auth-shared";
 
 export function LoginForm({
   className,
+  redirectTo,
   ...props
-}: React.ComponentProps<"form">) {
+}: React.ComponentProps<"form"> & { redirectTo?: string }) {
   const navigate = useNavigate();
+  const router = useRouter();
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
@@ -32,7 +34,11 @@ export function LoginForm({
         setErrorMessage(error.message ?? "Could not sign in.");
         return;
       }
-      void navigate({ to: "/" });
+      if (redirectTo) {
+        router.history.push(redirectTo);
+      } else {
+        void navigate({ to: "/" });
+      }
     } finally {
       setIsPending(false);
     }
@@ -104,7 +110,11 @@ export function LoginForm({
       </div>
       <div className="text-center text-sm">
         Don&apos;t have an account?{" "}
-        <Link to="/signup" className="underline underline-offset-4">
+        <Link
+          to="/signup"
+          search={{ redirect: redirectTo }}
+          className="underline underline-offset-4"
+        >
           Sign up
         </Link>
       </div>
