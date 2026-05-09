@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate, useRouter } from "@tanstack/react-router";
 import { Button } from "@repo/ui/components/button";
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
@@ -10,9 +10,11 @@ import { AuthFormHeader } from "./auth-shared";
 
 export function SignupForm({
   className,
+  redirectTo,
   ...props
-}: React.ComponentProps<"form">) {
+}: React.ComponentProps<"form"> & { redirectTo?: string }) {
   const navigate = useNavigate();
+  const router = useRouter();
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -41,7 +43,11 @@ export function SignupForm({
         setErrorMessage(error.message ?? "Could not create account.");
         return;
       }
-      void navigate({ to: "/" });
+      if (redirectTo) {
+        router.history.push(redirectTo);
+      } else {
+        void navigate({ to: "/" });
+      }
     } finally {
       setIsPending(false);
     }
@@ -130,7 +136,11 @@ export function SignupForm({
       </div>
       <div className="text-center text-sm">
         Already have an account?{" "}
-        <Link to="/signin" className="underline underline-offset-4">
+        <Link
+          to="/signin"
+          search={{ redirect: redirectTo }}
+          className="underline underline-offset-4"
+        >
           Sign in
         </Link>
       </div>
