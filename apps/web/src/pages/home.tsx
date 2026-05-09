@@ -71,7 +71,7 @@ export function HomePage() {
   }
 
   return (
-    <div className="min-h-dvh text-neutral-800 antialiased scheme-light-dark">
+    <div className="min-h-dvh bg-background text-foreground antialiased">
       <div className="mx-auto max-w-4xl px-6 py-12">
         <div className="mb-10 flex flex-col items-center justify-center gap-6 text-center sm:flex-row sm:text-left">
           <div className="relative h-[179px] w-[170px] shrink-0">
@@ -92,19 +92,20 @@ export function HomePage() {
             />
           </div>
           <div>
-            <h1 className="text-3xl font-semibold text-neutral-950 sm:text-4xl">
-              vithos
-            </h1>
-            <p className="mt-2 text-lg text-neutral-600">
+            <h1 className="text-3xl font-semibold sm:text-4xl">vithos</h1>
+            <p className="mt-2 text-lg text-muted-foreground">
               Edit{" "}
-              <code className="rounded bg-neutral-100 px-1.5 py-0.5 font-mono text-sm">
+              <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-sm text-foreground">
                 src/pages/home-page.tsx
               </code>{" "}
               and save to test HMR
             </p>
-            <p className="mt-2 font-mono text-sm text-neutral-500">
+            <p className="mt-2 font-mono text-sm text-muted-foreground">
               API{" "}
-              <code className="rounded bg-neutral-100 px-1">/api/health</code>:{" "}
+              <code className="rounded bg-muted px-1 text-foreground">
+                /api/health
+              </code>
+              :{" "}
               {health === null
                 ? "loading…"
                 : health === "error"
@@ -130,16 +131,16 @@ export function HomePage() {
           </div>
         </div>
 
-        <div className="mb-6 h-2 bg-[repeating-linear-gradient(90deg,transparent,transparent_4px,currentColor_4px,currentColor_8px)] text-neutral-200" />
+        <div className="mb-6 h-2 bg-[repeating-linear-gradient(90deg,transparent,transparent_4px,currentColor_4px,currentColor_8px)] text-border" />
 
-        <Card className="mx-auto max-w-xl border-neutral-200/80 bg-neutral-50/50 shadow-sm">
+        <Card className="mx-auto max-w-xl shadow-sm">
           <CardHeader>
             <CardTitle className="text-lg">Repository</CardTitle>
             <CardDescription>Source for this project</CardDescription>
           </CardHeader>
           <CardContent>
             <a
-              className="inline-flex items-center gap-2 font-mono text-sm text-violet-600 hover:underline"
+              className="inline-flex items-center gap-2 font-mono text-sm text-primary hover:underline"
               href="https://github.com/reybahl/vithos"
               target="_blank"
               rel="noreferrer"

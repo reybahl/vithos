@@ -8,7 +8,7 @@ import { router } from "./router";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ThemeProvider attribute="class" defaultTheme="light">
+    <ThemeProvider attribute="class" defaultTheme="system">
       <RouterProvider router={router} />
       <Toaster />
     </ThemeProvider>
