@@ -1,5 +1,5 @@
+import { kyselyAdapter } from "@better-auth/kysely-adapter";
 import { betterAuth } from "better-auth";
-import { prismaAdapter } from "better-auth/adapters/prisma";
 
 import { db } from "@repo/db";
 
@@ -12,7 +12,7 @@ function requireEnv(name: string): string {
 }
 
 /**
- * Single Better Auth instance: Prisma-backed sessions, email/password, experimental joins.
+ * Single Better Auth instance: Kysely-backed persistence, email/password, experimental joins.
  * Mount `auth.handler` on your server (see `@repo/hono-app`). Use `npx auth@latest generate`
  * with `--config` pointing here to refresh `packages/db/prisma/schema.prisma`.
  */
@@ -24,8 +24,8 @@ export const auth = betterAuth({
   secret: requireEnv("BETTER_AUTH_SECRET"),
   baseURL: requireEnv("BETTER_AUTH_URL"),
   trustedOrigins,
-  database: prismaAdapter(db, {
-    provider: "postgresql",
+  database: kyselyAdapter(db, {
+    type: "postgres",
   }),
   emailAndPassword: {
     enabled: true,

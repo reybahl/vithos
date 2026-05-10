@@ -8,11 +8,6 @@
       "types": "./src/index.ts",
       "import": "./src/index.ts",
       "default": "./src/index.ts"
-    },
-    "./client": {
-      "types": "./src/client.ts",
-      "import": "./src/client.ts",
-      "default": "./src/client.ts"
     }
   },
   "scripts": {
@@ -26,16 +21,17 @@
     "typecheck": "prisma generate && tsc --noEmit"
   },
   "dependencies": {
-    "@prisma/adapter-pg": "^7.8.0",
-    "@prisma/client": "^7.8.0",
+    "kysely": "0.28.17",
     "pg": "^8.16.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@types/pg": "^8.20.0",
     "dotenv": "^16.5.0",
     "eslint": "^10.2.1",
     "globals": "^17.5.0",
     "prisma": "^7.8.0",
+    "prisma-kysely": "^3.1.0",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.58.2"
   }
