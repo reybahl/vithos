@@ -1,7 +1,7 @@
 import type { AppType } from "@repo/hono-app/app";
 import { hc } from "hono/client";
 
-import { env } from "../env/client";
+import { env } from "../../env/client";
 
 function apiBaseUrl(): string {
   const fromEnv = env.VITE_API_URL;
