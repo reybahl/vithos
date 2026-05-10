@@ -1,12 +1,12 @@
+import { env } from "./env";
+
 import { serve } from "@hono/node-server";
 import { app } from "@repo/hono-app/app";
-
-const port = Number(process.env.PORT) || 3001;
 
 serve(
   {
     fetch: app.fetch,
-    port,
+    port: env.PORT,
   },
   (info) => {
     console.log(`Listening on port ${info.port}`);

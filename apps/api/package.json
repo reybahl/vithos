@@ -14,15 +14,17 @@
   "dependencies": {
     "@hono/node-server": "^1.19.7",
     "@repo/hono-app": "workspace:*",
-    "hono": "^4.11.3"
+    "@t3-oss/env-core": "^0.13.11",
+    "hono": "^4.11.3",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/node": "^24.12.2",
+    "dotenv-cli": "^8.0.0",
     "esbuild": "^0.27.2",
     "eslint": "^10.2.1",
     "globals": "^17.5.0",
-    "dotenv-cli": "^8.0.0",
     "tsx": "^4.21.0",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.58.2"

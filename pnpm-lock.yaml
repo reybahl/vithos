@@ -37,9 +37,15 @@ importers:
       "@repo/hono-app":
         specifier: workspace:*
         version: link:../../packages/hono-app
+      "@t3-oss/env-core":
+        specifier: ^0.13.11
+        version: 0.13.11(typescript@6.0.3)(zod@4.4.3)
       hono:
         specifier: ^4.11.3
         version: 4.12.17
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
     devDependencies:
       "@eslint/js":
         specifier: ^10.0.1
@@ -77,6 +83,9 @@ importers:
       "@repo/ui":
         specifier: workspace:*
         version: link:../../packages/ui
+      "@t3-oss/env-core":
+        specifier: ^0.13.11
+        version: 0.13.11(typescript@6.0.3)(zod@4.4.3)
       "@tanstack/react-router":
         specifier: ^1.169.2
         version: 1.169.2(react-dom@19.2.5)(react@19.2.5)
@@ -98,6 +107,9 @@ importers:
       react-dom:
         specifier: ^19.2.5
         version: 19.2.5(react@19.2.5)
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
     devDependencies:
       "@eslint/js":
         specifier: ^10.0.1
@@ -726,11 +738,11 @@ packages:
       "@better-fetch/fetch": 1.1.21
       "@opentelemetry/semantic-conventions": 1.40.0
       "@standard-schema/spec": 1.1.0
-      better-call: 1.3.5(zod@4.3.6)
+      better-call: 1.3.5(zod@4.4.3)
       jose: 6.2.3
       kysely: 0.28.17
       nanostores: 1.3.0
-      zod: 4.3.6
+      zod: 4.4.3
     dev: false
 
   /@better-auth/drizzle-adapter@1.6.9(@better-auth/core@1.6.9)(@better-auth/utils@0.4.0):
@@ -4287,6 +4299,30 @@ packages:
       }
     dev: true
 
+  /@t3-oss/env-core@0.13.11(typescript@6.0.3)(zod@4.4.3):
+    resolution:
+      {
+        integrity: sha512-sM7GYY+KL7H/Hl0BE0inWfk3nRHZOLhmVn7sHGxaZt9FAR6KqREXAE+6TqKfiavfXmpRxO/OZ2QgKRd+oiBYRQ==,
+      }
+    peerDependencies:
+      arktype: ^2.1.0
+      typescript: ">=5.0.0"
+      valibot: ^1.0.0-beta.7 || ^1.0.0
+      zod: ^3.24.0 || ^4.0.0
+    peerDependenciesMeta:
+      arktype:
+        optional: true
+      typescript:
+        optional: true
+      valibot:
+        optional: true
+      zod:
+        optional: true
+    dependencies:
+      typescript: 6.0.3
+      zod: 4.4.3
+    dev: false
+
   /@tailwindcss/node@4.2.4:
     resolution:
       {
@@ -5376,20 +5412,20 @@ packages:
       "@better-fetch/fetch": 1.1.21
       "@noble/ciphers": 2.2.0
       "@noble/hashes": 2.2.0
-      better-call: 1.3.5(zod@4.3.6)
+      better-call: 1.3.5(zod@4.4.3)
       defu: 6.1.7
       jose: 6.2.3
       kysely: 0.28.17
       nanostores: 1.3.0
       react: 19.2.5
       react-dom: 19.2.5(react@19.2.5)
-      zod: 4.3.6
+      zod: 4.4.3
     transitivePeerDependencies:
       - "@cloudflare/workers-types"
       - "@opentelemetry/api"
     dev: false
 
-  /better-call@1.3.5(zod@4.3.6):
+  /better-call@1.3.5(zod@4.4.3):
     resolution:
       {
         integrity: sha512-kOFJkBP7utAQLEYrobZm3vkTH8mXq5GNgvjc5/XEST1ilVHaxXUXfeDeFlqoETMtyqS4+3/h4ONX2i++ebZrvA==,
@@ -5404,7 +5440,7 @@ packages:
       "@better-fetch/fetch": 1.1.21
       rou3: 0.7.12
       set-cookie-parser: 3.1.0
-      zod: 4.3.6
+      zod: 4.4.3
     dev: false
 
   /better-result@2.9.2:
@@ -6326,8 +6362,8 @@ packages:
       "@babel/parser": 7.29.2
       eslint: 10.2.1
       hermes-parser: 0.25.1
-      zod: 4.3.6
-      zod-validation-error: 4.0.2(zod@4.3.6)
+      zod: 4.4.3
+      zod-validation-error: 4.0.2(zod@4.4.3)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -10651,7 +10687,7 @@ packages:
       zod: 3.25.76
     dev: false
 
-  /zod-validation-error@4.0.2(zod@4.3.6):
+  /zod-validation-error@4.0.2(zod@4.4.3):
     resolution:
       {
         integrity: sha512-Q6/nZLe6jxuU80qb/4uJ4t5v2VEZ44lzQjPDhYJNztRQ4wyWc6VF3D3Kb/fAuPetZQnhS3hnajCf9CsWesghLQ==,
@@ -10660,7 +10696,7 @@ packages:
     peerDependencies:
       zod: ^3.25.0 || ^4.0.0
     dependencies:
-      zod: 4.3.6
+      zod: 4.4.3
     dev: true
 
   /zod@3.25.76:
@@ -10674,4 +10710,11 @@ packages:
     resolution:
       {
         integrity: sha512-rftlrkhHZOcjDwkGlnUtZZkvaPHCsDATp4pGpuOOMDaTdDDXF91wuVDJoWoPsKX/3YPQ5fHuF3STjcYyKr+Qhg==,
+      }
+    dev: true
+
+  /zod@4.4.3:
+    resolution:
+      {
+        integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==,
       }
