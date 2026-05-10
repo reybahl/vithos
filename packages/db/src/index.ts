@@ -1,2 +1,2 @@
-export { db, type PrismaClientType } from "./client.js";
-export type * from "./generated/prisma/models.js";
+export { sql } from "kysely";
+export { db, type DB } from "./db.js";

@@ -15,6 +15,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@better-auth/kysely-adapter": "^1.6.9",
     "@repo/db": "workspace:*",
     "better-auth": "^1.6.9"
   },
