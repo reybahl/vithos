@@ -8,12 +8,15 @@ import { TooltipProvider } from "@repo/ui/components/tooltip";
 import { ThemeToggle } from "./components/theme-toggle";
 import "./index.css";
 import { AppRouterProvider } from "./app-router-provider";
+import { QueryProvider } from "./lib/query-provider";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ThemeProvider attribute="class" defaultTheme="system">
       <TooltipProvider>
-        <AppRouterProvider />
+        <QueryProvider>
+          <AppRouterProvider />
+        </QueryProvider>
         <ThemeToggle />
         <Toaster />
       </TooltipProvider>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@repo/ui/components/button";
 import { toast } from "@repo/ui/components/sonner";
 import {
@@ -13,46 +13,38 @@ import reactLogo from "../assets/react.svg";
 import viteLogo from "../assets/vite.svg";
 import heroImg from "../assets/hero.png";
 import { apiClient } from "../lib/api-client";
+import { apiQueryKeys } from "../lib/api-query-keys";
 import { authClient } from "../lib/auth-client";
 
 export function DashboardHomeContent() {
   const session = authClient.useSession();
-  const [count, setCount] = useState<number | null>(null);
-  const [counterError, setCounterError] = useState(false);
-  const [incrementing, setIncrementing] = useState(false);
-  const [health, setHealth] = useState<{ ok: true } | "error" | null>(null);
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    void (async () => {
-      try {
-        const res = await apiClient.api.health.$get();
-        if (!res.ok) {
-          setHealth("error");
-          return;
-        }
-        setHealth(await res.json());
-      } catch {
-        setHealth("error");
-      }
-    })();
-  }, []);
+  const healthQuery = useQuery({
+    queryKey: apiQueryKeys.health,
+    queryFn: async () => {
+      const res = await apiClient.api.health.$get();
+      if (!res.ok) throw new Error("Health check failed");
+      return res.json() as Promise<{ ok: true }>;
+    },
+  });
 
-  useEffect(() => {
-    void (async () => {
-      try {
-        const res = await apiClient.api.counter.$get();
-        if (!res.ok) {
-          setCounterError(true);
-          return;
-        }
-        const body = await res.json();
-        setCount(body.count);
-        setCounterError(false);
-      } catch {
-        setCounterError(true);
-      }
-    })();
-  }, []);
+  const counterQuery = useQuery({
+    queryKey: apiQueryKeys.counter,
+    queryFn: async () => {
+      const res = await apiClient.api.counter.$get();
+      if (!res.ok) throw new Error("Counter fetch failed");
+      return res.json() as Promise<{ count: number }>;
+    },
+  });
+
+  const incrementMutation = useMutation({
+    mutationFn: async () => {
+      const res = await apiClient.api.counter.increment.$post();
+      if (!res.ok) throw new Error("Increment failed");
+      return res.json() as Promise<{ count: number }>;
+    },
+  });
 
   async function incrementCounter() {
     if (session.isPending) return;
@@ -60,22 +52,19 @@ export function DashboardHomeContent() {
       toast.error("Sign in to use the counter.");
       return;
     }
-    setIncrementing(true);
     try {
-      const res = await apiClient.api.counter.increment.$post();
-      if (!res.ok) return;
-      const body = await res.json();
-      setCount(body.count);
-      setCounterError(false);
+      const data = await incrementMutation.mutateAsync();
+      queryClient.setQueryData(apiQueryKeys.counter, data);
       toast.success("Count updated", {
-        description: `New value: ${body.count}`,
+        description: `New value: ${data.count}`,
       });
     } catch {
-      setCounterError(true);
-    } finally {
-      setIncrementing(false);
+      toast.error("Could not update the counter.");
     }
   }
+
+  const counterLoading = counterQuery.isPending && !counterQuery.isError;
+  const counterUnreachable = counterQuery.isError;
 
   return (
     <div className="mx-auto max-w-4xl text-foreground antialiased">
@@ -108,11 +97,11 @@ export function DashboardHomeContent() {
               /api/health
             </code>
             :{" "}
-            {health === null
+            {healthQuery.isPending
               ? "loading…"
-              : health === "error"
+              : healthQuery.isError
                 ? "unreachable (start apps/api)"
-                : health.ok
+                : healthQuery.data?.ok
                   ? "ok"
                   : "bad response"}
           </p>
@@ -120,15 +109,18 @@ export function DashboardHomeContent() {
             type="button"
             variant="secondary"
             className="mt-4"
-            disabled={(count === null && !counterError) || incrementing}
+            disabled={
+              (counterQuery.isPending && !counterQuery.isError) ||
+              incrementMutation.isPending
+            }
             onClick={() => void incrementCounter()}
           >
             Count is{" "}
-            {count === null && !counterError
+            {counterLoading
               ? "loading…"
-              : counterError
+              : counterUnreachable
                 ? "unreachable"
-                : count}
+                : counterQuery.data?.count}
           </Button>
         </div>
       </div>

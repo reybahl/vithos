@@ -86,6 +86,9 @@ importers:
       "@t3-oss/env-core":
         specifier: ^0.13.11
         version: 0.13.11(typescript@6.0.3)(zod@4.4.3)
+      "@tanstack/react-query":
+        specifier: ^5.100.10
+        version: 5.100.10(react@19.2.5)
       "@tanstack/react-router":
         specifier: ^1.169.2
         version: 1.169.2(react-dom@19.2.5)(react@19.2.5)
@@ -4529,6 +4532,25 @@ packages:
         integrity: sha512-NaOGLRrddszbQj9upGat6HG/4TKvXLvu+osAIgfxPYA+eIvYKv8GKDJOrY2D3/U9MRnKfMWD7bU4jeD4xmqyIg==,
       }
     engines: { node: ">=20.19" }
+    dev: false
+
+  /@tanstack/query-core@5.100.10:
+    resolution:
+      {
+        integrity: sha512-8UR0yJR+GiQ40m3lPhUr0xbfAupe6GSQiksSBSa9SM2NjezFyxXCIA69/lz8cSoNKZLrw1/PktIyQBJcVeMi3w==,
+      }
+    dev: false
+
+  /@tanstack/react-query@5.100.10(react@19.2.5):
+    resolution:
+      {
+        integrity: sha512-FLaZf2RCrA/Zgp4aiu5tG3TyasTRO7aZ99skxQpr3Hg/zXOhu6yq5FZCYQ/tRaJtM9ylnoK8tFK7PolXQadv6Q==,
+      }
+    peerDependencies:
+      react: ^18 || ^19
+    dependencies:
+      "@tanstack/query-core": 5.100.10
+      react: 19.2.5
     dev: false
 
   /@tanstack/react-router@1.169.2(react-dom@19.2.5)(react@19.2.5):

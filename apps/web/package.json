@@ -15,6 +15,7 @@
     "@repo/hono-app": "workspace:*",
     "@repo/ui": "workspace:*",
     "@t3-oss/env-core": "^0.13.11",
+    "@tanstack/react-query": "^5.100.10",
     "@tanstack/react-router": "^1.169.2",
     "better-auth": "^1.6.9",
     "hono": "^4.11.3",
