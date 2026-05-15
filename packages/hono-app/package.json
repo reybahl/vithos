@@ -8,6 +8,11 @@
       "types": "./src/app.ts",
       "import": "./src/app.ts",
       "default": "./src/app.ts"
+    },
+    "./cors-env": {
+      "types": "./src/cors-env.ts",
+      "import": "./src/cors-env.ts",
+      "default": "./src/cors-env.ts"
     }
   },
   "scripts": {
