@@ -1,5 +1,6 @@
 name = "vithos-api"
 main = "src/index.ts"
 compatibility_date = "2025-05-05"
+compatibility_flags = ["nodejs_compat"]
 
 # Set account_id via `wrangler whoami` output, env CF_ACCOUNT_ID, or the deploy action.
