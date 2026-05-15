@@ -15,9 +15,11 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@hono/zod-validator": "^0.8.0",
     "@repo/auth": "workspace:*",
     "@repo/db": "workspace:*",
-    "hono": "^4.11.3"
+    "hono": "^4.11.3",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

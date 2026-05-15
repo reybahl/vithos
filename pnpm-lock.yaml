@@ -261,6 +261,9 @@ importers:
 
   packages/hono-app:
     dependencies:
+      "@hono/zod-validator":
+        specifier: ^0.8.0
+        version: 0.8.0(hono@4.12.17)(zod@4.4.3)
       "@repo/auth":
         specifier: workspace:*
         version: link:../auth
@@ -270,6 +273,9 @@ importers:
       hono:
         specifier: ^4.11.3
         version: 4.12.17
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
     devDependencies:
       "@eslint/js":
         specifier: ^10.0.1
@@ -1626,6 +1632,19 @@ packages:
       hono: ^4
     dependencies:
       hono: 4.12.17
+    dev: false
+
+  /@hono/zod-validator@0.8.0(hono@4.12.17)(zod@4.4.3):
+    resolution:
+      {
+        integrity: sha512-5uS4S1/LKtZQYvD4BtpPUFkOv8d1wNxHHrChm26buMiEYc1FrHWvDUaKVBwkiVtvSExHSpLGDvcnpI2Copyj9w==,
+      }
+    peerDependencies:
+      hono: ">=4.10.0"
+      zod: ^3.25.0 || ^4.0.0
+    dependencies:
+      hono: 4.12.17
+      zod: 4.4.3
     dev: false
 
   /@humanfs/core@0.19.2:
@@ -8998,7 +9017,7 @@ packages:
       "@prisma/internals": 7.8.0(typescript@5.9.3)
       prisma: 7.8.0(@types/react@19.2.14)(react-dom@19.2.5)(react@19.2.5)(typescript@6.0.3)
       typescript: 5.9.3
-      zod: 4.3.6
+      zod: 4.4.3
     transitivePeerDependencies:
       - magicast
     dev: true
@@ -10727,13 +10746,6 @@ packages:
         integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==,
       }
     dev: false
-
-  /zod@4.3.6:
-    resolution:
-      {
-        integrity: sha512-rftlrkhHZOcjDwkGlnUtZZkvaPHCsDATp4pGpuOOMDaTdDDXF91wuVDJoWoPsKX/3YPQ5fHuF3STjcYyKr+Qhg==,
-      }
-    dev: true
 
   /zod@4.4.3:
     resolution:
