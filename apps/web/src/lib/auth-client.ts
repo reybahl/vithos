@@ -1,10 +1,15 @@
 import { createAuthClient } from "better-auth/react";
 
+import { env } from "../../env/client";
+
 /**
- * Talks to Better Auth on the same origin (`/api/auth/*` is proxied to the API in dev).
- * `credentials: "include"` keeps the session cookie on cross-subdomain / proxied setups.
+ * Dev: Vite proxies `/api/*`; omitting `baseURL` uses same-origin `/api/auth`.
+ * Prod: set `VITE_API_URL` to the Worker origin; Better Auth appends `/api/auth` (and trims trailing `/`).
  */
+const baseURL = env.VITE_API_URL;
+
 export const authClient = createAuthClient({
+  ...(baseURL ? { baseURL } : {}),
   fetchOptions: {
     credentials: "include",
   },
