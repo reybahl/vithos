@@ -10,7 +10,8 @@
     "lint-staged": "lint-staged",
     "prepare": "husky",
     "postinstall": "pnpm db:generate",
-    "db:generate": "pnpm --filter @repo/db run db:generate"
+    "db:generate": "pnpm --filter @repo/db run db:generate",
+    "db:migrate:deploy": "pnpm --filter @repo/db run db:migrate:deploy"
   },
   "devDependencies": {
     "eslint": "^8.57.0",
