@@ -1,5 +1,5 @@
-import { AppSidebar } from "../components/app-sidebar";
-import { DashboardHomeContent } from "../components/dashboard-home-content";
+import { AppSidebar } from "../components/AppSidebar";
+import { DashboardHomeContent } from "../components/DashboardHomeContent";
 
 export function DashboardPage() {
   return (

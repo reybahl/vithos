@@ -87,7 +87,7 @@ export function DashboardHomeContent() {
           <p className="mt-2 text-lg text-muted-foreground">
             Edit{" "}
             <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-sm text-foreground">
-              src/components/dashboard-home-content.tsx
+              src/components/DashboardHomeContent.tsx
             </code>{" "}
             and save to test HMR
           </p>

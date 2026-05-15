@@ -1,6 +1,6 @@
 import { useSearch } from "@tanstack/react-router";
-import { AuthSplitLayout } from "../components/auth-split-layout";
-import { SignupForm } from "../components/signup-form";
+import { AuthSplitLayout } from "../components/AuthSplitLayout";
+import { SignupForm } from "../components/SignupForm";
 
 export function SignUpPage() {
   const { redirect } = useSearch({ from: "/signup" });

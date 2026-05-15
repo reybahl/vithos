@@ -1,6 +1,6 @@
 import { useSearch } from "@tanstack/react-router";
-import { AuthSplitLayout } from "../components/auth-split-layout";
-import { LoginForm } from "../components/login-form";
+import { AuthSplitLayout } from "../components/AuthSplitLayout";
+import { LoginForm } from "../components/LoginForm";
 
 export function SignInPage() {
   const { redirect } = useSearch({ from: "/signin" });

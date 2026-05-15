@@ -6,7 +6,7 @@ import { Label } from "@repo/ui/components/label";
 import { cn } from "@repo/ui/lib/utils";
 
 import { authClient } from "../lib/auth-client";
-import { AuthFormHeader } from "./auth-shared";
+import { AuthFormHeader } from "./AuthShared";
 
 export function SignupForm({
   className,

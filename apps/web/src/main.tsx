@@ -5,7 +5,7 @@ import { createRoot } from "react-dom/client";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "@repo/ui/components/sonner";
 import { TooltipProvider } from "@repo/ui/components/tooltip";
-import { ThemeToggle } from "./components/theme-toggle";
+import { ThemeToggle } from "./components/ThemeToggle";
 import "./index.css";
 import { AppRouterProvider } from "./app-router-provider";
 import { QueryProvider } from "./lib/query-provider";
