@@ -8,7 +8,9 @@
     "format": "prettier --check \"**/*.{js,mjs,cjs,ts,tsx,mts,cts,jsx,json,css,scss,md,mdx,yml,yaml,html}\"",
     "format:fix": "prettier --write \"**/*.{js,mjs,cjs,ts,tsx,mts,cts,jsx,json,css,scss,md,mdx,yml,yaml,html}\"",
     "lint-staged": "lint-staged",
-    "prepare": "husky"
+    "prepare": "husky",
+    "postinstall": "pnpm db:generate",
+    "db:generate": "pnpm --filter @repo/db run db:generate"
   },
   "devDependencies": {
     "eslint": "^8.57.0",
