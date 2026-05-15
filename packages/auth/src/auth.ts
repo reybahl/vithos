@@ -11,26 +11,40 @@ function requireEnv(name: string): string {
   return value;
 }
 
-/**
- * Single Better Auth instance: Kysely-backed persistence, email/password, experimental joins.
- * Mount `auth.handler` on your server (see `@repo/hono-app`). Use `npx auth@latest generate`
- * with `--config` pointing here to refresh `packages/db/prisma/schema.prisma`.
- */
-const trustedOrigins = process.env.BETTER_AUTH_TRUSTED_ORIGINS?.split(",")
-  .map((o) => o.trim())
-  .filter(Boolean) ?? ["http://localhost:5173"];
+function createAuth() {
+  const trustedOrigins = process.env.BETTER_AUTH_TRUSTED_ORIGINS?.split(",")
+    .map((o) => o.trim())
+    .filter(Boolean) ?? ["http://localhost:5173"];
 
-export const auth = betterAuth({
-  secret: requireEnv("BETTER_AUTH_SECRET"),
-  baseURL: requireEnv("BETTER_AUTH_URL"),
-  trustedOrigins,
-  database: kyselyAdapter(db, {
-    type: "postgres",
-  }),
-  emailAndPassword: {
-    enabled: true,
-  },
-  experimental: {
-    joins: true,
+  return betterAuth({
+    secret: requireEnv("BETTER_AUTH_SECRET"),
+    baseURL: requireEnv("BETTER_AUTH_URL"),
+    trustedOrigins,
+    database: kyselyAdapter(db, {
+      type: "postgres",
+    }),
+    emailAndPassword: {
+      enabled: true,
+    },
+    experimental: {
+      joins: true,
+    },
+  });
+}
+
+type AuthShape = ReturnType<typeof createAuth>;
+
+let cachedAuth: AuthShape | undefined;
+
+/**
+ * Better Auth singleton (lazy): Kysely-backed persistence, email/password, joins.
+ */
+export const auth = new Proxy({} as AuthShape, {
+  get(_target, prop, receiver) {
+    cachedAuth ??= createAuth();
+    const value = Reflect.get(cachedAuth as object, prop, receiver);
+    return typeof value === "function"
+      ? (value as (...a: unknown[]) => unknown).bind(cachedAuth)
+      : value;
   },
 });
