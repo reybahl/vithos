@@ -1,5 +1,4 @@
 import { AsyncLocalStorage } from "node:async_hooks";
-
 import { Kysely, PostgresDialect } from "kysely";
 import { PostgresJSDialect } from "kysely-postgres-js";
 import { Pool } from "pg";
@@ -8,23 +7,23 @@ import postgres from "postgres";
 import type { DB } from "./generated/kysely/types.js";
 
 /**
- * Workers + Hyperdrive: use Postgres.js per request (Cloudflare guidance). A shared `pg` Pool
- * often deadlocks / appears hung on the Workers runtime.
+ * Per-request Kysely for Cloudflare Workers (Postgres.js). Cloudflare recommends creating a new
+ * `postgres()` client each invocation; Hyperdrive owns the real pool. This ALS carries the instance
+ * through `await` so shared code can keep using `import { db } from "@repo/db"`.
+ *
+ * @see https://developers.cloudflare.com/hyperdrive/concepts/connection-lifecycle/
+ * @see https://developers.cloudflare.com/workers/runtime-apis/nodejs/asynclocalstorage/
  */
-const edgeRequestDb = new AsyncLocalStorage<Kysely<DB>>();
+const workerRequestDb = new AsyncLocalStorage<Kysely<DB>>();
 
-export function runWithEdgeDatabase<T>(
-  kysely: Kysely<DB>,
+/**
+ * Run `fn` with a fresh Postgres.js + Kysely bound to `db`. Call once per Worker `fetch`.
+ * Do not call `sql.end()`; Workers + Hyperdrive clean up when the invocation ends.
+ */
+export function runWithWorkerDatabase<T>(
+  connectionString: string,
   fn: () => T | Promise<T>,
 ): T | Promise<T> {
-  return edgeRequestDb.run(kysely, fn);
-}
-
-/** Call once per Worker fetch when using Hyperdrive; `close()` in `finally`. */
-export function createEdgeKysely(connectionString: string): {
-  kysely: Kysely<DB>;
-  close: () => Promise<void>;
-} {
   const sql = postgres(connectionString, {
     max: 5,
     fetch_types: false,
@@ -33,12 +32,7 @@ export function createEdgeKysely(connectionString: string): {
   const kysely = new Kysely<DB>({
     dialect: new PostgresJSDialect({ postgres: sql }),
   });
-  return {
-    kysely,
-    async close() {
-      await sql.end({ timeout: 10 });
-    },
-  };
+  return workerRequestDb.run(kysely, fn);
 }
 
 function createNodeDb() {
@@ -59,12 +53,13 @@ const globalForDb = globalThis as unknown as {
   db: Kysely<DB> | undefined;
 };
 
-/** One pool per isolate. Dev also pins on global for HMR-style reload in Node. */
 let prodDbSingleton: Kysely<DB> | undefined;
 
 function resolveDb(): Kysely<DB> {
-  const fromEdge = edgeRequestDb.getStore();
-  if (fromEdge) return fromEdge;
+  const edge = workerRequestDb.getStore();
+  if (edge) {
+    return edge;
+  }
 
   if (process.env.NODE_ENV !== "production") {
     if (!globalForDb.db) globalForDb.db = createNodeDb();
@@ -76,6 +71,7 @@ function resolveDb(): Kysely<DB> {
 
 /**
  * Lazy Kysely: avoids connecting (and needing DATABASE_URL) at module load.
+ * On Workers, only valid inside `runWithWorkerDatabase`.
  */
 export const db = new Proxy({} as Kysely<DB>, {
   get(_target, prop, receiver) {

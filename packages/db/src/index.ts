@@ -1,2 +1,2 @@
 export { sql } from "kysely";
-export { createEdgeKysely, db, runWithEdgeDatabase, type DB } from "./db.js";
+export { db, runWithWorkerDatabase, type DB } from "./db.js";
