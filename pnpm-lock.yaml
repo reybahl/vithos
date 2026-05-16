@@ -162,6 +162,9 @@ importers:
 
   apps/worker:
     dependencies:
+      "@repo/db":
+        specifier: workspace:*
+        version: link:../../packages/db
       "@repo/hono-app":
         specifier: workspace:*
         version: link:../../packages/hono-app

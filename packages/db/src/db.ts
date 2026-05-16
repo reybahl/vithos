@@ -3,11 +3,27 @@ import { Pool } from "pg";
 
 import type { DB } from "./generated/kysely/types.js";
 
+/**
+ * Set at the start of each Cloudflare Worker fetch with `env.HYPERDRIVE.connectionString`.
+ * When unset, `process.env.DATABASE_URL` is used (Node, API server, wrangler dev, etc.).
+ * @see https://developers.cloudflare.com/hyperdrive/configuration/connect-to-postgres/
+ */
+let edgePreferredConnectionString: string | undefined;
+
+export function configureDatabaseConnectionString(
+  connectionString: string | undefined,
+): void {
+  edgePreferredConnectionString = connectionString;
+}
+
 function createDb() {
-  const connectionString = process.env.DATABASE_URL;
+  const connectionString =
+    edgePreferredConnectionString ?? process.env.DATABASE_URL;
 
   if (!connectionString) {
-    throw new Error("DATABASE_URL must be set to use @repo/db.");
+    throw new Error(
+      "Database URL missing: set HYPERDRIVE on the Worker or DATABASE_URL for Node.",
+    );
   }
 
   const dialect = new PostgresDialect({

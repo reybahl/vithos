@@ -1,3 +1,4 @@
+import { configureDatabaseConnectionString } from "@repo/db";
 import { createApp } from "@repo/hono-app/app";
 import { corsOriginForBrowserRequest } from "@repo/hono-app/cors-env";
 import type { Context } from "hono";
@@ -47,4 +48,21 @@ worker.use(
 
 worker.route("/", app);
 
-export default worker;
+type WorkerEnv = {
+  HYPERDRIVE?: { connectionString: string };
+};
+
+/**
+ * `pg` + a raw public `DATABASE_URL` from an isolate often hangs; use Hyperdrive and pass
+ * `env.HYPERDRIVE.connectionString` into `@repo/db` before handling the request.
+ */
+export default {
+  fetch(
+    request: Request,
+    env: WorkerEnv,
+    _ctx: ExecutionContext,
+  ): Response | Promise<Response> {
+    configureDatabaseConnectionString(env.HYPERDRIVE?.connectionString);
+    return worker.fetch(request, env, _ctx);
+  },
+};

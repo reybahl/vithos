@@ -3,6 +3,11 @@ main = "src/index.ts"
 compatibility_date = "2025-05-05"
 compatibility_flags = ["nodejs_compat", "nodejs_compat_populate_process_env"]
 
+# Postgres: Hyperdrive config `vithos-db` (origin DB is Neon; do not commit real URLs—use apps/worker/.env for one-off CLI only).
+[[hyperdrive]]
+binding = "HYPERDRIVE"
+id = "8c4dcf21a5d24475a98a549dd4e9eb47"
+
 # Set account_id via `wrangler whoami` output, env CF_ACCOUNT_ID, or the deploy action.
 # Browser API + cookies: set `CORS_ALLOWED_ORIGINS` (comma-separated) in Dashboard / `.dev.vars`
 # (e.g. `https://vithos.reybahl.com`; must match the browser `Origin` header). Wired in `apps/worker`.

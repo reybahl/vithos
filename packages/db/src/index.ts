@@ -1,2 +1,2 @@
 export { sql } from "kysely";
-export { db, type DB } from "./db.js";
+export { configureDatabaseConnectionString, db, type DB } from "./db.js";

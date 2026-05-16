@@ -11,6 +11,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@repo/db": "workspace:*",
     "@repo/hono-app": "workspace:*",
     "hono": "^4.11.3"
   },
