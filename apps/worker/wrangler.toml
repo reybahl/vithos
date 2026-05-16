@@ -7,6 +7,10 @@ compatibility_flags = ["nodejs_compat", "nodejs_compat_populate_process_env"]
 # Browser API + cookies: set `CORS_ALLOWED_ORIGINS` (comma-separated) in Dashboard / `.dev.vars`
 # (e.g. `https://vithos.reybahl.com`; must match the browser `Origin` header). Wired in `apps/worker`.
 
+# https://developers.cloudflare.com/workers/observability/logs/workers-logs/
+[observability]
+enabled = true
+head_sampling_rate = 1 # 1 = every request; lower later if log volume/cost matters
+
 [observability.logs]
-enabled = false
 invocation_logs = true
