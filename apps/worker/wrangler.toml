@@ -3,7 +3,10 @@ main = "src/index.ts"
 compatibility_date = "2025-05-05"
 compatibility_flags = ["nodejs_compat", "nodejs_compat_populate_process_env"]
 
-# Postgres: Hyperdrive config `vithos-db` (origin DB is Neon; do not commit real URLs—use apps/worker/.env for one-off CLI only).
+# Postgres: Hyperdrive `vithos-db`. For Neon, origin must be the DIRECT connection string
+# (disable "pooling" in Neon UI)—not the `*-pooler.*` host. Hyperdrive pools; double poolers hang/break.
+# Update origin: `wrangler hyperdrive update 8c4dcf21a5d24475a98a549dd4e9eb47 --connection-string="postgres://..."`
+# https://developers.cloudflare.com/hyperdrive/examples/neon/
 [[hyperdrive]]
 binding = "HYPERDRIVE"
 id = "8c4dcf21a5d24475a98a549dd4e9eb47"

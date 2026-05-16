@@ -1,4 +1,4 @@
-import { configureDatabaseConnectionString } from "@repo/db";
+import { createEdgeKysely, runWithEdgeDatabase } from "@repo/db";
 import { createApp } from "@repo/hono-app/app";
 import { corsOriginForBrowserRequest } from "@repo/hono-app/cors-env";
 import type { Context } from "hono";
@@ -53,16 +53,26 @@ type WorkerEnv = {
 };
 
 /**
- * `pg` + a raw public `DATABASE_URL` from an isolate often hangs; use Hyperdrive and pass
- * `env.HYPERDRIVE.connectionString` into `@repo/db` before handling the request.
+ * Hyperdrive + `pg` Pool in a Worker often hangs. Use Postgres.js scoped to this fetch via
+ * AsyncLocalStorage (see `createEdgeKysely` / `runWithEdgeDatabase`).
  */
 export default {
-  fetch(
+  async fetch(
     request: Request,
     env: WorkerEnv,
     _ctx: ExecutionContext,
-  ): Response | Promise<Response> {
-    configureDatabaseConnectionString(env.HYPERDRIVE?.connectionString);
+  ): Promise<Response> {
+    const cs = env.HYPERDRIVE?.connectionString;
+    if (cs) {
+      const { kysely, close } = createEdgeKysely(cs);
+      try {
+        return await runWithEdgeDatabase(kysely, async () =>
+          worker.fetch(request, env, _ctx),
+        );
+      } finally {
+        await close();
+      }
+    }
     return worker.fetch(request, env, _ctx);
   },
 };

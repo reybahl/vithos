@@ -1,29 +1,51 @@
+import { AsyncLocalStorage } from "node:async_hooks";
+
 import { Kysely, PostgresDialect } from "kysely";
+import { PostgresJSDialect } from "kysely-postgres-js";
 import { Pool } from "pg";
+import postgres from "postgres";
 
 import type { DB } from "./generated/kysely/types.js";
 
 /**
- * Set at the start of each Cloudflare Worker fetch with `env.HYPERDRIVE.connectionString`.
- * When unset, `process.env.DATABASE_URL` is used (Node, API server, wrangler dev, etc.).
- * @see https://developers.cloudflare.com/hyperdrive/configuration/connect-to-postgres/
+ * Workers + Hyperdrive: use Postgres.js per request (Cloudflare guidance). A shared `pg` Pool
+ * often deadlocks / appears hung on the Workers runtime.
  */
-let edgePreferredConnectionString: string | undefined;
+const edgeRequestDb = new AsyncLocalStorage<Kysely<DB>>();
 
-export function configureDatabaseConnectionString(
-  connectionString: string | undefined,
-): void {
-  edgePreferredConnectionString = connectionString;
+export function runWithEdgeDatabase<T>(
+  kysely: Kysely<DB>,
+  fn: () => T | Promise<T>,
+): T | Promise<T> {
+  return edgeRequestDb.run(kysely, fn);
 }
 
-function createDb() {
-  const connectionString =
-    edgePreferredConnectionString ?? process.env.DATABASE_URL;
+/** Call once per Worker fetch when using Hyperdrive; `close()` in `finally`. */
+export function createEdgeKysely(connectionString: string): {
+  kysely: Kysely<DB>;
+  close: () => Promise<void>;
+} {
+  const sql = postgres(connectionString, {
+    max: 5,
+    fetch_types: false,
+    prepare: true,
+  });
+  const kysely = new Kysely<DB>({
+    dialect: new PostgresJSDialect({ postgres: sql }),
+  });
+  return {
+    kysely,
+    async close() {
+      await sql.end({ timeout: 10 });
+    },
+  };
+}
+
+function createNodeDb() {
+  const connectionString = process.env.DATABASE_URL;
 
   if (!connectionString) {
-    throw new Error(
-      "Database URL missing: set HYPERDRIVE on the Worker or DATABASE_URL for Node.",
-    );
+    throw new Error("DATABASE_URL must be set to use @repo/db.");
   }
 
   const dialect = new PostgresDialect({
@@ -41,11 +63,14 @@ const globalForDb = globalThis as unknown as {
 let prodDbSingleton: Kysely<DB> | undefined;
 
 function resolveDb(): Kysely<DB> {
+  const fromEdge = edgeRequestDb.getStore();
+  if (fromEdge) return fromEdge;
+
   if (process.env.NODE_ENV !== "production") {
-    if (!globalForDb.db) globalForDb.db = createDb();
+    if (!globalForDb.db) globalForDb.db = createNodeDb();
     return globalForDb.db;
   }
-  prodDbSingleton ??= createDb();
+  prodDbSingleton ??= createNodeDb();
   return prodDbSingleton;
 }
 
