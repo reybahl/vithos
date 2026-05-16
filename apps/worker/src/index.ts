@@ -17,6 +17,23 @@ const app = createApp({
 
 const worker = new Hono();
 
+/**
+ * Hono's `cors()` sets headers on `c.res` before `next()`, but Better Auth's
+ * `auth.handler()` returns a fresh `Response`, which replaces `c.res` and drops those
+ * headers. Re-apply credentialed CORS to the *final* response after the subtree runs.
+ */
+worker.use("*", async (c, next) => {
+  await next();
+  const allow = corsOriginForBrowserRequest(
+    c.req.header("origin") || undefined,
+    corsAllowedOriginsFromBindings(c),
+  );
+  if (allow) {
+    c.res.headers.set("Access-Control-Allow-Origin", allow);
+    c.res.headers.set("Access-Control-Allow-Credentials", "true");
+  }
+});
+
 worker.use(
   "*",
   cors({
