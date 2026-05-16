@@ -1,7 +1,11 @@
 import { env } from "./env";
 
+import { createApp } from "@repo/hono-app/app";
 import { serve } from "@hono/node-server";
-import { app } from "@repo/hono-app/app";
+
+const app = createApp({
+  getCorsAllowedOriginsCsv: () => env.CORS_ALLOWED_ORIGINS,
+});
 
 serve(
   {
