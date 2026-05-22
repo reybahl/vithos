@@ -34,6 +34,7 @@ export function LoginForm({
         setErrorMessage(error.message ?? "Could not sign in.");
         return;
       }
+      await authClient.getSession();
       if (redirectTo) {
         router.history.push(redirectTo);
       } else {

@@ -21,9 +21,8 @@ export function createApp(options: CreateAppOptions) {
   return (
     new Hono<{ Variables: AuthVariables }>()
       .basePath("/api")
-      // Registered before `use("*", loadSession)` so this route skips session middleware.
+      // Registered before `use("*", loadSession)` so these routes skip session middleware.
       .get("/health", (c) => c.json({ ok: true as const }))
-      .use("*", loadSession)
       .use(
         "/auth/*",
         cors({
@@ -37,6 +36,7 @@ export function createApp(options: CreateAppOptions) {
         }),
       )
       .on(["POST", "GET"], "/auth/*", (c) => auth.handler(c.req.raw))
+      .use("*", loadSession)
       .route("/counter", counterRouter)
       .route("/validation-example", validationExampleRouter)
   );

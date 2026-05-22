@@ -1,36 +1,42 @@
 import { AsyncLocalStorage } from "node:async_hooks";
 import { Kysely, PostgresDialect } from "kysely";
-import { PostgresJSDialect } from "kysely-postgres-js";
 import { Pool } from "pg";
-import postgres from "postgres";
 
 import type { DB } from "./generated/kysely/types.js";
 
 /**
- * Per-request Kysely for Cloudflare Workers (Postgres.js). Cloudflare recommends creating a new
- * `postgres()` client each invocation; Hyperdrive owns the real pool. This ALS carries the instance
- * through `await` so shared code can keep using `import { db } from "@repo/db"`.
+ * Per-request Kysely for Cloudflare Workers (`pg` Client via Hyperdrive). Cloudflare
+ * recommends a new `Client` per invocation — not `Pool`. Hyperdrive owns the real pool.
  *
+ * @see https://developers.cloudflare.com/hyperdrive/examples/connect-to-postgres/postgres-drivers-and-libraries/node-postgres/
  * @see https://developers.cloudflare.com/hyperdrive/concepts/connection-lifecycle/
- * @see https://developers.cloudflare.com/workers/runtime-apis/nodejs/asynclocalstorage/
  */
 const workerRequestDb = new AsyncLocalStorage<Kysely<DB>>();
 
+let workerRuntime = false;
+
+/** Called from `apps/worker` so `@repo/db` never falls back to Node pooling on Workers. */
+export function enableWorkerRuntime() {
+  workerRuntime = true;
+}
+
 /**
- * Run `fn` with a fresh Postgres.js + Kysely bound to `db`. Call once per Worker `fetch`.
- * Do not call `sql.end()`; Workers + Hyperdrive clean up when the invocation ends.
+ * Run `fn` with a per-request `pg` pool (max 1) bound to Hyperdrive. Call once per Worker `fetch`.
+ * Do not call `pool.end()`; Workers + Hyperdrive clean up when the invocation ends.
  */
 export function runWithWorkerDatabase<T>(
   connectionString: string,
   fn: () => T | Promise<T>,
 ): T | Promise<T> {
-  const sql = postgres(connectionString, {
-    max: 5,
-    fetch_types: false,
-    prepare: true,
+  const pool = new Pool({
+    connectionString,
+    max: 1,
+    connectionTimeoutMillis: 10_000,
+    idleTimeoutMillis: 0,
+    allowExitOnIdle: true,
   });
   const kysely = new Kysely<DB>({
-    dialect: new PostgresJSDialect({ postgres: sql }),
+    dialect: new PostgresDialect({ pool }),
   });
   return workerRequestDb.run(kysely, fn);
 }
@@ -61,6 +67,12 @@ function resolveDb(): Kysely<DB> {
     return edge;
   }
 
+  if (workerRuntime) {
+    throw new Error(
+      "@repo/db: database used outside runWithWorkerDatabase on Cloudflare Workers.",
+    );
+  }
+
   if (process.env.NODE_ENV !== "production") {
     if (!globalForDb.db) globalForDb.db = createNodeDb();
     return globalForDb.db;
@@ -80,6 +92,10 @@ export const db = new Proxy({} as Kysely<DB>, {
     return typeof value === "function"
       ? (value as (...a: unknown[]) => unknown).bind(instance)
       : value;
+  },
+  /** `in` / reflection must hit the real Kysely, not the empty target, for adapters that introspect `db`. */
+  has(_target, prop) {
+    return Reflect.has(resolveDb() as object, prop);
   },
 });
 

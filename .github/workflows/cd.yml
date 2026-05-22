@@ -74,8 +74,8 @@ jobs:
       - name: Build web
         run: pnpm --filter web build
         env:
-          # Repo variable: Worker origin with trailing slash, e.g. https://vithos-api.<account>.workers.dev/
-          VITE_API_URL: ${{ vars.WORKER_URL }}
+          # API origin with trailing slash, e.g. https://api.vithos.reybahl.com/
+          VITE_API_URL: ${{ vars.API_URL }}
       - name: Deploy Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:

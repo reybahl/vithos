@@ -212,6 +212,9 @@ importers:
       "@eslint/js":
         specifier: ^10.0.1
         version: 10.0.1(eslint@10.2.1)
+      "@types/node":
+        specifier: ^24.12.2
+        version: 24.12.2
       eslint:
         specifier: ^10.2.1
         version: 10.2.1
@@ -230,15 +233,9 @@ importers:
       kysely:
         specifier: 0.28.17
         version: 0.28.17
-      kysely-postgres-js:
-        specifier: ^3.0.0
-        version: 3.0.0(kysely@0.28.17)(postgres@3.4.7)
       pg:
-        specifier: ^8.16.0
+        specifier: ^8.16.3
         version: 8.20.0
-      postgres:
-        specifier: ^3.4.7
-        version: 3.4.7
     devDependencies:
       "@eslint/js":
         specifier: ^10.0.1
@@ -7884,23 +7881,6 @@ packages:
       }
     engines: { node: ">=6" }
 
-  /kysely-postgres-js@3.0.0(kysely@0.28.17)(postgres@3.4.7):
-    resolution:
-      {
-        integrity: sha512-o2t/xNSYJQDW6rVGGFPXKmZ0BEz2dGn66c2B+cO/k9ZNcU2qPWPycQPQ+B+P2MBXbKYq0xV9BZmFIvkUrmFWAQ==,
-      }
-    engines: { bun: ">=1.2", node: ">=20" }
-    peerDependencies:
-      kysely: 0.28.17
-      postgres: ^3.4.0
-    peerDependenciesMeta:
-      postgres:
-        optional: true
-    dependencies:
-      kysely: 0.28.17
-      postgres: 3.4.7
-    dev: false
-
   /kysely@0.28.17:
     resolution:
       {
@@ -8994,6 +8974,7 @@ packages:
         integrity: sha512-Jtc2612XINuBjIl/QTWsV5UvE8UHuNblcO3vVADSrKsrc6RqGX6lOW1cEo3CM2v0XG4Nat8nI+YM7/f26VxXLw==,
       }
     engines: { node: ">=12" }
+    dev: true
 
   /powershell-utils@0.1.0:
     resolution:

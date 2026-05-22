@@ -3,6 +3,8 @@ import { betterAuth } from "better-auth";
 
 import { db } from "@repo/db";
 
+import { hashPassword, verifyPassword } from "./password";
+
 function requireEnv(name: string): string {
   const value = process.env[name];
   if (!value) {
@@ -25,9 +27,10 @@ function createAuth() {
     }),
     emailAndPassword: {
       enabled: true,
-    },
-    experimental: {
-      joins: true,
+      password: {
+        hash: hashPassword,
+        verify: verifyPassword,
+      },
     },
   });
 }
@@ -36,9 +39,7 @@ type AuthShape = ReturnType<typeof createAuth>;
 
 let cachedAuth: AuthShape | undefined;
 
-/**
- * Better Auth singleton (lazy): Kysely-backed persistence, email/password, joins.
- */
+/** Better Auth singleton (lazy): Kysely-backed persistence, email/password. */
 export const auth = new Proxy({} as AuthShape, {
   get(_target, prop, receiver) {
     cachedAuth ??= createAuth();

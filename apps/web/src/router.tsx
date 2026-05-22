@@ -4,9 +4,7 @@ import {
   createRoute,
   createRouter,
   redirect,
-  isRedirect,
 } from "@tanstack/react-router";
-import { authClient } from "./lib/auth-client";
 import { DashboardPage } from "./pages/dashboard";
 import { SignInPage } from "./pages/sign-in";
 import { SignUpPage } from "./pages/sign-up";
@@ -19,13 +17,15 @@ export interface RouterContext {
 }
 
 /** If already signed in, skip auth pages—use `redirect` target when safe (same origin). */
-async function beforeLoadForwardIfSignedIn({
+function beforeLoadForwardIfSignedIn({
+  context,
   search,
 }: {
+  context: RouterContext;
   search: { redirect?: string };
 }) {
-  const res = await authClient.getSession();
-  if (res.error || !res.data?.user) return;
+  if (context.auth.isPending || !context.auth.isAuthenticated) return;
+
   let to = "/dashboard";
   if (search.redirect) {
     try {
@@ -48,23 +48,13 @@ const authenticatedLayoutRoute = createRoute({
   getParentRoute: () => rootRoute,
   id: "_authenticated",
   component: () => <Outlet />,
-  beforeLoad: async ({ location }) => {
-    try {
-      const res = await authClient.getSession();
-      const user = res.error ? null : res.data?.user;
-      if (!user) {
-        throw redirect({
-          to: "/signin",
-          search: { redirect: location.href },
-        });
-      }
-    } catch (error) {
-      if (isRedirect(error)) throw error;
-      throw redirect({
-        to: "/signin",
-        search: { redirect: location.href },
-      });
-    }
+  beforeLoad: ({ context, location }) => {
+    if (context.auth.isPending) return;
+    if (context.auth.isAuthenticated) return;
+    throw redirect({
+      to: "/signin",
+      search: { redirect: location.href },
+    });
   },
 });
 

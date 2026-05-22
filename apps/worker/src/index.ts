@@ -1,4 +1,6 @@
-import { runWithWorkerDatabase } from "@repo/db";
+import { enableWorkerRuntime, runWithWorkerDatabase } from "@repo/db";
+
+enableWorkerRuntime();
 import { createApp } from "@repo/hono-app/app";
 import { corsOriginForBrowserRequest } from "@repo/hono-app/cors-env";
 import type { Context } from "hono";

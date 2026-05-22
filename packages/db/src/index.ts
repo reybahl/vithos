@@ -1,2 +1,7 @@
 export { sql } from "kysely";
-export { db, runWithWorkerDatabase, type DB } from "./db.js";
+export {
+  db,
+  enableWorkerRuntime,
+  runWithWorkerDatabase,
+  type DB,
+} from "./db.js";

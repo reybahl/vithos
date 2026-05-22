@@ -3,8 +3,7 @@ import { createAuthClient } from "better-auth/react";
 import { env } from "../../env/client";
 
 /**
- * Dev: Vite proxies `/api/*`; omitting `baseURL` uses same-origin `/api/auth`.
- * Prod: set `VITE_API_URL` to the Worker origin; Better Auth appends `/api/auth` (and trims trailing `/`).
+ * Dev: Vite proxies `/api/*` (same origin). Prod: `VITE_API_URL` → API subdomain.
  */
 const baseURL = env.VITE_API_URL;
 
