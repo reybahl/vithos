@@ -53,7 +53,11 @@ jobs:
           packageManager: pnpm
           workingDirectory: apps/worker
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          command: versions upload --preview-alias ${{ env.WORKER_PREVIEW_ALIAS }} --keep-vars --message 'Preview PR #${{ github.event.pull_request.number }}'
+          command: >-
+            versions upload
+            --preview-alias ${{ env.WORKER_PREVIEW_ALIAS }}
+            --keep-vars
+            --message "Preview PR ${{ github.event.pull_request.number }}"
 
       - name: Parse Worker preview alias URL
         id: worker_initial_alias
@@ -83,7 +87,7 @@ jobs:
             --var BETTER_AUTH_URL:${{ steps.worker_initial_alias.outputs.url }}/
             --var CORS_ALLOWED_ORIGINS:${{ steps.pages_origin.outputs.url }}
             --var BETTER_AUTH_TRUSTED_ORIGINS:${{ steps.pages_origin.outputs.url }}
-            --message 'Preview PR #${{ github.event.pull_request.number }} (auth)'
+            --message "Preview PR ${{ github.event.pull_request.number }} auth"
 
       - name: Resolve API URL
         id: resolve_api_url
