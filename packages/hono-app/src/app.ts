@@ -4,6 +4,7 @@ import { cors } from "hono/cors";
 
 import { auth } from "@acme/auth";
 import { corsOriginForBrowserRequest } from "./cors-env";
+import { requireTrustedBrowserOrigin } from "./csrf-middleware";
 import { loadSession, type AuthVariables } from "./auth-middleware";
 import { counterRouter } from "./routes/counter";
 import { validationExampleRouter } from "./routes/validation-example";
@@ -36,6 +37,12 @@ export function createApp(options: CreateAppOptions) {
         }),
       )
       .on(["POST", "GET"], "/auth/*", (c) => auth.handler(c.req.raw))
+      .use(
+        "*",
+        requireTrustedBrowserOrigin({
+          getAllowedOriginsCsv: getCorsAllowedOriginsCsv,
+        }),
+      )
       .use("*", loadSession)
       .route("/counter", counterRouter)
       .route("/validation-example", validationExampleRouter)

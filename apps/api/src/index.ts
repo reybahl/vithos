@@ -1,10 +1,10 @@
-import { env } from "./env";
+import { browserAllowedOrigins, env } from "./env";
 
 import { createApp } from "@acme/hono-app/app";
 import { serve } from "@hono/node-server";
 
 const app = createApp({
-  getCorsAllowedOriginsCsv: () => env.CORS_ALLOWED_ORIGINS,
+  getCorsAllowedOriginsCsv: () => browserAllowedOrigins,
 });
 
 serve(

@@ -12,8 +12,8 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@hono/node-server": "^2.0.3",
     "@acme/hono-app": "workspace:*",
+    "@hono/node-server": "^2.0.3",
     "@t3-oss/env-core": "^0.13.11",
     "hono": "^4.12.22",
     "zod": "^4.4.3"

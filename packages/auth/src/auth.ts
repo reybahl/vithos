@@ -6,22 +6,26 @@ import { db } from "@acme/db";
 import { hashPassword, verifyPassword } from "./password";
 
 function requireEnv(name: string): string {
-  const value = process.env[name];
+  const value = process.env[name]?.trim();
   if (!value) {
     throw new Error(`${name} must be set for Better Auth.`);
   }
   return value;
 }
 
-function createAuth() {
-  const trustedOrigins = process.env.BETTER_AUTH_TRUSTED_ORIGINS?.split(",")
-    .map((o) => o.trim())
-    .filter(Boolean) ?? ["http://localhost:5173"];
+function trustedOriginsFromEnv(): string[] {
+  return (
+    process.env.BETTER_AUTH_TRUSTED_ORIGINS?.split(",")
+      .map((origin) => origin.trim())
+      .filter(Boolean) ?? ["http://localhost:5173"]
+  );
+}
 
+function createAuth() {
   return betterAuth({
     secret: requireEnv("BETTER_AUTH_SECRET"),
     baseURL: requireEnv("BETTER_AUTH_URL"),
-    trustedOrigins,
+    trustedOrigins: trustedOriginsFromEnv(),
     database: kyselyAdapter(db, {
       type: "postgres",
     }),
