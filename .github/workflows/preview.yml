@@ -135,8 +135,10 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          packageManager: pnpm
+          workingDirectory: apps/worker
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          command: pages deploy apps/web/dist --project-name=${{ env.CF_PAGES_PROJECT_NAME }} --branch=${{ github.head_ref }}
+          command: pages deploy ../web/dist --project-name=${{ env.CF_PAGES_PROJECT_NAME }} --branch=${{ github.head_ref }}
 
       - name: Comment preview URLs on PR
         uses: actions/github-script@v7
