@@ -12,21 +12,20 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@hono/node-server": "^1.19.7",
+    "@hono/node-server": "^2.0.3",
     "@repo/hono-app": "workspace:*",
     "@t3-oss/env-core": "^0.13.11",
-    "hono": "^4.11.3",
+    "hono": "^4.12.22",
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
-    "@types/node": "^24.12.2",
-    "dotenv-cli": "^8.0.0",
-    "esbuild": "^0.27.2",
-    "eslint": "^10.2.1",
-    "globals": "^17.5.0",
-    "tsx": "^4.21.0",
-    "typescript": "~6.0.2",
-    "typescript-eslint": "^8.58.2"
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript": "workspace:*",
+    "@types/node": "^25.9.1",
+    "dotenv-cli": "^11.0.0",
+    "esbuild": "^0.28.0",
+    "eslint": "^10.4.0",
+    "tsx": "^4.22.3",
+    "typescript": "~6.0.3"
   }
 }

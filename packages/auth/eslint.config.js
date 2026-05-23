@@ -1,18 +1,10 @@
-import js from "@eslint/js";
-import globals from "globals";
-import tseslint from "typescript-eslint";
-import { defineConfig, globalIgnores } from "eslint/config";
+import { defineConfig } from "eslint/config";
+import { envGlobals, sharedIgnores, typescript } from "@repo/eslint-config";
 
 export default defineConfig([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,mts,cts}"],
-    extends: [js.configs.recommended, ...tseslint.configs.recommended],
-    languageOptions: {
-      globals: { ...globals.es2023 },
-      parserOptions: {
-        tsconfigRootDir: import.meta.dirname,
-      },
-    },
-  },
+  sharedIgnores(),
+  typescript({
+    tsconfigRootDir: import.meta.dirname,
+    globals: { ...envGlobals.es2023, ...envGlobals.node },
+  }),
 ]);

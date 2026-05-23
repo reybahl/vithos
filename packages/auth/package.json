@@ -3,28 +3,24 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "types": "./src/auth.ts",
   "exports": {
-    ".": {
-      "types": "./src/auth.ts",
-      "import": "./src/auth.ts",
-      "default": "./src/auth.ts"
-    }
+    ".": "./src/auth.ts"
   },
   "scripts": {
     "lint": "eslint .",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@better-auth/kysely-adapter": "^1.6.9",
+    "@better-auth/kysely-adapter": "^1.6.11",
     "@repo/db": "workspace:*",
-    "better-auth": "^1.6.9"
+    "better-auth": "^1.6.11"
   },
   "devDependencies": {
-    "@types/node": "^24.12.2",
-    "@eslint/js": "^10.0.1",
-    "eslint": "^10.2.1",
-    "globals": "^17.5.0",
-    "typescript": "~6.0.2",
-    "typescript-eslint": "^8.58.2"
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript": "workspace:*",
+    "@types/node": "^25.9.1",
+    "eslint": "^10.4.0",
+    "typescript": "~6.0.3"
   }
 }

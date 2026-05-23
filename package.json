@@ -14,12 +14,11 @@
     "db:migrate:deploy": "pnpm --filter @repo/db run db:migrate:deploy"
   },
   "devDependencies": {
-    "eslint": "^8.57.0",
     "husky": "^9.1.7",
-    "lint-staged": "^16.4.0",
-    "prettier": "^3.2.5",
-    "turbo": "^2.9.6",
-    "wrangler": "^4.88.0"
+    "lint-staged": "^17.0.5",
+    "prettier": "^3.8.3",
+    "turbo": "^2.9.14",
+    "typescript": "~6.0.3"
   },
   "packageManager": "pnpm@8.15.6",
   "name": "vithos-stack",

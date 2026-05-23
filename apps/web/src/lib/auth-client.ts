@@ -7,9 +7,11 @@ import { env } from "../../env/client";
  */
 const baseURL = env.VITE_API_URL;
 
-export const authClient = createAuthClient({
-  ...(baseURL ? { baseURL } : {}),
-  fetchOptions: {
-    credentials: "include",
+export const authClient: ReturnType<typeof createAuthClient> = createAuthClient(
+  {
+    ...(baseURL ? { baseURL } : {}),
+    fetchOptions: {
+      credentials: "include",
+    },
   },
-});
+);

@@ -4,16 +4,8 @@
   "private": true,
   "type": "module",
   "exports": {
-    "./app": {
-      "types": "./src/app.ts",
-      "import": "./src/app.ts",
-      "default": "./src/app.ts"
-    },
-    "./cors-env": {
-      "types": "./src/cors-env.ts",
-      "import": "./src/cors-env.ts",
-      "default": "./src/cors-env.ts"
-    }
+    "./app": "./src/app.ts",
+    "./cors-env": "./src/cors-env.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
@@ -23,14 +15,13 @@
     "@hono/zod-validator": "^0.8.0",
     "@repo/auth": "workspace:*",
     "@repo/db": "workspace:*",
-    "hono": "^4.11.3",
+    "hono": "^4.12.22",
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
-    "eslint": "^10.2.1",
-    "globals": "^17.5.0",
-    "typescript": "~6.0.2",
-    "typescript-eslint": "^8.58.2"
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript": "workspace:*",
+    "eslint": "^10.4.0",
+    "typescript": "~6.0.3"
   }
 }

@@ -1,0 +1,13 @@
+{
+  // IDE-only solution file. Use `pnpm typecheck` (turbo) for CI and local checks.
+  "files": [],
+  "references": [
+    { "path": "./packages/auth" },
+    { "path": "./packages/db" },
+    { "path": "./packages/hono-app" },
+    { "path": "./packages/ui" },
+    { "path": "./apps/api" },
+    { "path": "./apps/worker" },
+    { "path": "./apps/web" }
+  ]
+}
