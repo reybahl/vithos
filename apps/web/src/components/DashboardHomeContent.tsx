@@ -114,11 +114,11 @@ export function DashboardHomeContent() {
         </p>
         <a
           className="mt-2 inline-flex items-center gap-2 font-mono text-sm text-primary hover:underline"
-          href="https://github.com/your-org/your-repo"
+          href="https://github.com/reybahl/vithos"
           target="_blank"
           rel="noreferrer"
         >
-          your-org/your-repo
+          reybahl/vithos-stack
         </a>
       </section>
     </div>
