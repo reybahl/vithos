@@ -1,4 +1,5 @@
 import js from "@eslint/js";
+import eslintConfigPrettier from "eslint-config-prettier/flat";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
@@ -32,7 +33,11 @@ export function typescript({
 }) {
   return {
     files,
-    extends: [js.configs.recommended, ...tseslint.configs.recommended],
+    extends: [
+      js.configs.recommended,
+      ...tseslint.configs.recommended,
+      eslintConfigPrettier,
+    ],
     languageOptions: languageOptions({ tsconfigRootDir, globals: env }),
   };
 }
@@ -48,6 +53,7 @@ export function reactLibrary({
       js.configs.recommended,
       ...tseslint.configs.recommended,
       reactHooks.configs.flat.recommended,
+      eslintConfigPrettier,
     ],
     languageOptions: languageOptions({
       tsconfigRootDir,
@@ -69,6 +75,7 @@ export function reactTypeScript({
       ...tseslint.configs.recommended,
       reactHooks.configs.flat.recommended,
       reactRefresh.configs.vite,
+      eslintConfigPrettier,
     ],
     languageOptions: languageOptions({
       tsconfigRootDir,

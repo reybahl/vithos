@@ -1,1 +1,0 @@
-{"root":["./src/db.ts","./src/index.ts","./src/generated/kysely/types.ts","./prisma.config.ts"],"version":"6.0.3"}

@@ -1,4 +1,5 @@
 {
+  // IDE-only solution file. Use `pnpm typecheck` (turbo) for CI and local checks.
   "files": [],
   "references": [
     { "path": "./packages/auth" },
