@@ -9,7 +9,7 @@ import { DashboardPage } from "./pages/dashboard";
 import { SignInPage } from "./pages/sign-in";
 import { SignUpPage } from "./pages/sign-up";
 
-export interface RouterContext {
+interface RouterContext {
   auth: {
     isAuthenticated: boolean;
     isPending: boolean;

@@ -18,20 +18,26 @@ Then run `pnpm run build` and `pnpm run lint` from the root to confirm the works
 
 ## Structure
 
-- `apps/web` — Vite + React (TypeScript) SPA
-- `packages/*` — app and library code (empty until you add packages)
-- `tooling/eslint` — workspace package `@repo/eslint` (ESLint 8) for roots and other consumers that use legacy `.eslintrc` style. The web app uses its own **ESLint 10** flat `eslint.config.js` from the Vite template.
-- `tooling/typescript` — workspace package `@repo/typescript` with shared `base.json` / `vite.json` for libraries or new packages. The web app keeps the official Vite React `tsconfig` layout (`tsconfig.json` + `tsconfig.app.json` + `tsconfig.node.json`).
+- `apps/web` — Vite + React SPA
+- `apps/api` — local Node dev server for the Hono API
+- `apps/worker` — Cloudflare Worker deployment
+- `packages/*` — shared libraries (`auth`, `db`, `hono-app`, `ui`)
+- `tooling/typescript` — shared TSConfig presets (`base.json`, `react-library.json`, `vite.json`)
+- `tooling/eslint-config` — shared ESLint 10 flat config (`@repo/eslint-config`)
 
-`pnpm-workspace.yaml` includes `apps/*`, `packages/*`, and `tooling/*` (same “tooling is dev presets, packages is product code” split as in [create-t3-turbo](https://github.com/t3-oss/create-t3-turbo)).
+Each app/package extends the shared TS presets and imports lint helpers from `@repo/eslint-config`. The web app keeps the official Vite React project-reference layout (`tsconfig.json` + `tsconfig.app.json` + `tsconfig.node.json`).
+
+`pnpm-workspace.yaml` includes `apps/*`, `packages/*`, and `tooling/*`.
 
 ## Commands
 
-| Command      | Description             |
-| ------------ | ----------------------- |
-| `pnpm dev`   | Run all `dev` tasks     |
-| `pnpm build` | Build all apps/packages |
-| `pnpm lint`  | Lint (currently `web`)  |
+| Command           | Description                 |
+| ----------------- | --------------------------- |
+| `pnpm dev`        | Run all `dev` tasks         |
+| `pnpm build`      | Build all apps/packages     |
+| `pnpm lint`       | Lint all apps/packages      |
+| `pnpm typecheck`  | Typecheck all apps/packages |
+| `pnpm format:fix` | Format with Prettier        |
 
 ## Package manager
 

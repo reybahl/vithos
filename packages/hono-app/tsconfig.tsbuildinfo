@@ -1,0 +1,10 @@
+{
+  "root": [
+    "./src/app.ts",
+    "./src/auth-middleware.ts",
+    "./src/cors-env.ts",
+    "./src/routes/counter.ts",
+    "./src/routes/validation-example.ts"
+  ],
+  "version": "6.0.3"
+}
