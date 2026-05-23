@@ -1,0 +1,186 @@
+name: Preview
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+concurrency:
+  group: preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+env:
+  CF_PAGES_PROJECT_NAME: vithos
+  WORKER_PREVIEW_ALIAS: pr-${{ github.event.pull_request.number }}
+
+jobs:
+  preview-worker:
+    name: Preview API (Worker)
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+      pull-requests: write
+    outputs:
+      api_url: ${{ steps.resolve_api_url.outputs.url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.6
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Compute Pages preview origin
+        id: pages_origin
+        run: |
+          BRANCH='${{ github.head_ref }}'
+          ALIAS=$(echo "$BRANCH" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+|-+$//g')
+          echo "url=https://${ALIAS}.${{ env.CF_PAGES_PROJECT_NAME }}.pages.dev" >> "$GITHUB_OUTPUT"
+
+      - name: Upload Worker preview version
+        id: worker_initial
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          packageManager: pnpm
+          workingDirectory: apps/worker
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          command: versions upload --preview-alias ${{ env.WORKER_PREVIEW_ALIAS }} --keep-vars --message 'Preview PR #${{ github.event.pull_request.number }}'
+
+      - name: Parse Worker preview alias URL
+        id: worker_initial_alias
+        env:
+          CMD_OUTPUT: ${{ steps.worker_initial.outputs.command-output }}
+          FALLBACK_URL: ${{ steps.worker_initial.outputs.deployment-url }}
+        run: |
+          URL=$(printf '%s\n' "$CMD_OUTPUT" | sed -n 's/.*Version Preview Alias URL:[[:space:]]*\(https[^[:space:]]*\).*/\1/p' | head -1)
+          if [ -z "$URL" ]; then
+            URL="${FALLBACK_URL%/}"
+          fi
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+
+      - name: Configure Worker preview auth + CORS
+        id: worker
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          packageManager: pnpm
+          workingDirectory: apps/worker
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          command: >-
+            versions upload
+            --preview-alias ${{ env.WORKER_PREVIEW_ALIAS }}
+            --keep-vars
+            --var BETTER_AUTH_URL:${{ steps.worker_initial_alias.outputs.url }}/
+            --var CORS_ALLOWED_ORIGINS:${{ steps.pages_origin.outputs.url }}
+            --var BETTER_AUTH_TRUSTED_ORIGINS:${{ steps.pages_origin.outputs.url }}
+            --message 'Preview PR #${{ github.event.pull_request.number }} (auth)'
+
+      - name: Resolve API URL
+        id: resolve_api_url
+        env:
+          CMD_OUTPUT: ${{ steps.worker.outputs.command-output }}
+          FALLBACK_URL: ${{ steps.worker_initial_alias.outputs.url }}
+        run: |
+          URL=$(printf '%s\n' "$CMD_OUTPUT" | sed -n 's/.*Version Preview Alias URL:[[:space:]]*\(https[^[:space:]]*\).*/\1/p' | head -1)
+          if [ -z "$URL" ]; then
+            URL="${FALLBACK_URL%/}"
+          fi
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+
+  preview-pages:
+    name: Preview Frontend (Pages)
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    needs: [preview-worker]
+    permissions:
+      contents: read
+      deployments: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.6
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build web (preview)
+        run: pnpm --filter web build
+        env:
+          VITE_API_URL: ${{ needs.preview-worker.outputs.api_url }}/
+
+      - name: Deploy Pages preview
+        id: pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          command: pages deploy apps/web/dist --project-name=${{ env.CF_PAGES_PROJECT_NAME }} --branch=${{ github.head_ref }}
+
+      - name: Comment preview URLs on PR
+        uses: actions/github-script@v7
+        env:
+          WORKER_URL: ${{ needs.preview-worker.outputs.api_url }}
+          PAGES_URL: ${{ steps.pages.outputs.deployment-url }}
+          PAGES_ALIAS: ${{ steps.pages.outputs.pages-deployment-alias-url }}
+        with:
+          script: |
+            const marker = "<!-- cloudflare-preview -->";
+            const workerUrl = process.env.WORKER_URL;
+            const pagesUrl = process.env.PAGES_ALIAS || process.env.PAGES_URL;
+            const prNumber = context.payload.pull_request.number;
+
+            const body = [
+              marker,
+              `### Cloudflare preview (PR #${prNumber})`,
+              "",
+              "| App | URL |",
+              "| --- | --- |",
+              `| Frontend | ${pagesUrl} |`,
+              `| API | ${workerUrl} |`,
+              "",
+              "Production is unchanged. Preview uses the production database and Worker secrets.",
+            ].join("\n");
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+            });
+
+            const existing = comments.find((comment) =>
+              comment.body?.includes(marker),
+            );
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                body,
+              });
+            }
