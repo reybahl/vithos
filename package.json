@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo run dev",
+    "dev": "turbo run dev --filter=!worker",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
     "format": "prettier --check \"**/*.{js,mjs,cjs,ts,tsx,mts,cts,jsx,json,css,scss,md,mdx,yml,yaml,html}\"",
