@@ -1,17 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@repo/ui/components/button";
 import { toast } from "@repo/ui/components/sonner";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/components/card";
-import reactLogo from "../assets/react.svg";
-import viteLogo from "../assets/vite.svg";
-import heroImg from "../assets/hero.png";
+
 import { apiClient } from "../lib/api-client";
 import { apiQueryKeys } from "../lib/api-query-keys";
 import { authClient } from "../lib/auth-client";
@@ -55,98 +45,82 @@ export function DashboardHomeContent() {
     try {
       const data = await incrementMutation.mutateAsync();
       queryClient.setQueryData(apiQueryKeys.counter, data);
-      toast.success("Count updated", {
-        description: `New value: ${data.count}`,
-      });
     } catch {
       toast.error("Could not update the counter.");
     }
   }
 
-  const counterLoading = counterQuery.isPending && !counterQuery.isError;
-  const counterUnreachable = counterQuery.isError;
+  const isCounterBusy =
+    (counterQuery.isPending && !counterQuery.isError) ||
+    incrementMutation.isPending;
+  const countText = counterQuery.isError
+    ? "-"
+    : counterQuery.isPending
+      ? "..."
+      : String(counterQuery.data?.count ?? 0);
+  const healthText = healthQuery.isPending
+    ? "Checking"
+    : healthQuery.isError
+      ? "Unreachable"
+      : healthQuery.data?.ok
+        ? "Healthy"
+        : "Unexpected";
 
   return (
-    <div className="mx-auto max-w-4xl text-foreground antialiased">
-      <div className="mb-10 flex flex-col items-center justify-center gap-6 text-center sm:flex-row sm:text-left">
-        <div className="relative h-[179px] w-[170px] shrink-0">
-          <img src={heroImg} className="h-full w-full object-contain" alt="" />
-          <img
-            src={reactLogo}
-            className="absolute bottom-0 left-0 h-10 w-10"
-            alt="React"
-          />
-          <img
-            src={viteLogo}
-            className="absolute -right-2 top-1/2 h-10 w-10 -translate-y-1/2"
-            alt="Vite"
-          />
-        </div>
-        <div>
-          <h1 className="text-3xl font-semibold sm:text-4xl">vithos</h1>
-          <p className="mt-2 text-lg text-muted-foreground">
-            Edit{" "}
-            <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-sm text-foreground">
-              src/components/DashboardHomeContent.tsx
-            </code>{" "}
-            and save to test HMR
-          </p>
-          <p className="mt-2 font-mono text-sm text-muted-foreground">
-            API{" "}
-            <code className="rounded bg-muted px-1 text-foreground">
-              /api/health
-            </code>
-            :{" "}
-            {healthQuery.isPending
-              ? "loading…"
-              : healthQuery.isError
-                ? "unreachable (start apps/api)"
-                : healthQuery.data?.ok
-                  ? "ok"
-                  : "bad response"}
-          </p>
-          <Button
-            type="button"
-            variant="secondary"
-            className="mt-4"
-            disabled={
-              (counterQuery.isPending && !counterQuery.isError) ||
-              incrementMutation.isPending
-            }
-            onClick={() => void incrementCounter()}
-          >
-            Count is{" "}
-            {counterLoading
-              ? "loading…"
-              : counterUnreachable
-                ? "unreachable"
-                : counterQuery.data?.count}
-          </Button>
-        </div>
-      </div>
+    <div className="mx-auto w-full max-w-5xl space-y-8 text-foreground antialiased">
+      <section className="space-y-2">
+        <h1 className="text-3xl font-semibold tracking-tight">Dashboard</h1>
+        <p className="text-sm text-muted-foreground">
+          Minimal workspace. Live status only.
+        </p>
+      </section>
 
-      <div className="mb-6 h-2 bg-[repeating-linear-gradient(90deg,transparent,transparent_4px,currentColor_4px,currentColor_8px)] text-border" />
+      <section className="grid gap-4 md:grid-cols-2">
+        <div className="border bg-background p-4">
+          <p className="text-xs uppercase tracking-wide text-muted-foreground">
+            API
+          </p>
+          <p className="mt-2 text-2xl font-medium">{healthText}</p>
+          <p className="mt-1 text-xs text-muted-foreground">/api/health</p>
+        </div>
 
-      <Card className="mx-auto max-w-xl shadow-sm">
-        <CardHeader>
-          <CardTitle className="text-lg">Repository</CardTitle>
-          <CardDescription>Source for this project</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <a
-            className="inline-flex items-center gap-2 font-mono text-sm text-primary hover:underline"
-            href="https://github.com/reybahl/vithos"
-            target="_blank"
-            rel="noreferrer"
-          >
-            reybahl/vithos
-          </a>
-        </CardContent>
-        <CardFooter className="text-xs text-muted-foreground">
-          Components from{" "}
-          <code className="rounded bg-muted px-1">@repo/ui</code>
-        </CardFooter>
-      </Card>
+        <div className="border bg-background p-4">
+          <p className="text-xs uppercase tracking-wide text-muted-foreground">
+            Counter
+          </p>
+          <div className="mt-2 flex items-center justify-between gap-3">
+            <p className="text-2xl font-medium tabular-nums">{countText}</p>
+            <Button
+              type="button"
+              variant="secondary"
+              className="h-9 px-3"
+              disabled={isCounterBusy}
+              onClick={() => void incrementCounter()}
+            >
+              Increment
+            </Button>
+          </div>
+          {!session.data?.user ? (
+            <p className="mt-2 text-xs text-muted-foreground">
+              Sign in required to update.
+            </p>
+          ) : null}
+        </div>
+      </section>
+
+      <section className="border bg-background p-4">
+        <p className="text-xs uppercase tracking-wide text-muted-foreground">
+          Repository
+        </p>
+        <a
+          className="mt-2 inline-flex items-center gap-2 font-mono text-sm text-primary hover:underline"
+          href="https://github.com/reybahl/vithos"
+          target="_blank"
+          rel="noreferrer"
+        >
+          reybahl/vithos
+        </a>
+      </section>
     </div>
   );
 }
