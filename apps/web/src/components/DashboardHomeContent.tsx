@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Button } from "@repo/ui/components/button";
-import { toast } from "@repo/ui/components/sonner";
+import { Button } from "@acme/ui/components/button";
+import { toast } from "@acme/ui/components/sonner";
 
 import { apiClient } from "../lib/api-client";
 import { apiQueryKeys } from "../lib/api-query-keys";
@@ -114,11 +114,11 @@ export function DashboardHomeContent() {
         </p>
         <a
           className="mt-2 inline-flex items-center gap-2 font-mono text-sm text-primary hover:underline"
-          href="https://github.com/reybahl/vithos"
+          href="https://github.com/your-org/your-repo"
           target="_blank"
           rel="noreferrer"
         >
-          reybahl/vithos
+          your-org/your-repo
         </a>
       </section>
     </div>

@@ -2,7 +2,7 @@ import type { Context } from "hono";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 
-import { auth } from "@repo/auth";
+import { auth } from "@acme/auth";
 import { corsOriginForBrowserRequest } from "./cors-env";
 import { loadSession, type AuthVariables } from "./auth-middleware";
 import { counterRouter } from "./routes/counter";

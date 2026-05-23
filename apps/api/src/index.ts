@@ -1,6 +1,6 @@
 import { env } from "./env";
 
-import { createApp } from "@repo/hono-app/app";
+import { createApp } from "@acme/hono-app/app";
 import { serve } from "@hono/node-server";
 
 const app = createApp({

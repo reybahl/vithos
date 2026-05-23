@@ -1,9 +1,9 @@
 import * as React from "react";
 import { Link, useNavigate, useRouter } from "@tanstack/react-router";
-import { Button } from "@repo/ui/components/button";
-import { Input } from "@repo/ui/components/input";
-import { Label } from "@repo/ui/components/label";
-import { cn } from "@repo/ui/lib/utils";
+import { Button } from "@acme/ui/components/button";
+import { Input } from "@acme/ui/components/input";
+import { Label } from "@acme/ui/components/label";
+import { cn } from "@acme/ui/lib/utils";
 
 import { authClient } from "../lib/auth-client";
 import { AuthFormHeader } from "./AuthShared";

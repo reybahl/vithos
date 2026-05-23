@@ -1,6 +1,6 @@
 import type { MiddlewareHandler } from "hono";
 
-import { auth } from "@repo/auth";
+import { auth } from "@acme/auth";
 
 export type AuthVariables = {
   user: typeof auth.$Infer.Session.user | null;

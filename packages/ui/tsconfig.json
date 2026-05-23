@@ -1,4 +1,4 @@
 {
-  "extends": "@repo/typescript/react-library.json",
+  "extends": "@acme/typescript/react-library.json",
   "include": ["src/**/*.ts", "src/**/*.tsx", "eslint.config.js"]
 }

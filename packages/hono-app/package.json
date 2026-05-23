@@ -1,5 +1,5 @@
 {
-  "name": "@repo/hono-app",
+  "name": "@acme/hono-app",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -13,14 +13,14 @@
   },
   "dependencies": {
     "@hono/zod-validator": "^0.8.0",
-    "@repo/auth": "workspace:*",
-    "@repo/db": "workspace:*",
+    "@acme/auth": "workspace:*",
+    "@acme/db": "workspace:*",
     "hono": "^4.12.22",
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
-    "@repo/typescript": "workspace:*",
+    "@acme/eslint-config": "workspace:*",
+    "@acme/typescript": "workspace:*",
     "eslint": "^10.4.0",
     "typescript": "~6.0.3"
   }

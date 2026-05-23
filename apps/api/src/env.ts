@@ -2,7 +2,7 @@ import { createEnv } from "@t3-oss/env-core";
 import * as z from "zod";
 
 /**
- * Validates every var read by `@repo/db`, `@repo/auth`, and `@repo/hono-app` In this Node process.
+ * Validates every var read by `@acme/db`, `@acme/auth`, and `@acme/hono-app` In this Node process.
  * Import before any workspace package pulls from `process.env`.
  */
 export const env = createEnv({

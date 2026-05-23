@@ -1,5 +1,5 @@
 {
-  "name": "@repo/auth",
+  "name": "@acme/auth",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -13,12 +13,12 @@
   },
   "dependencies": {
     "@better-auth/kysely-adapter": "^1.6.11",
-    "@repo/db": "workspace:*",
+    "@acme/db": "workspace:*",
     "better-auth": "^1.6.11"
   },
   "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
-    "@repo/typescript": "workspace:*",
+    "@acme/eslint-config": "workspace:*",
+    "@acme/typescript": "workspace:*",
     "@types/node": "^25.9.1",
     "eslint": "^10.4.0",
     "typescript": "~6.0.3"

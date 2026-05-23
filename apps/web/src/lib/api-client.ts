@@ -1,4 +1,4 @@
-import type { AppType } from "@repo/hono-app/app";
+import type { AppType } from "@acme/hono-app/app";
 import { hc } from "hono/client";
 
 import { env } from "../../env/client";

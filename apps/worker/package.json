@@ -11,14 +11,14 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@repo/db": "workspace:*",
-    "@repo/hono-app": "workspace:*",
+    "@acme/db": "workspace:*",
+    "@acme/hono-app": "workspace:*",
     "hono": "^4.12.22"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20260523.1",
-    "@repo/eslint-config": "workspace:*",
-    "@repo/typescript": "workspace:*",
+    "@acme/eslint-config": "workspace:*",
+    "@acme/typescript": "workspace:*",
     "dotenv-cli": "^11.0.0",
     "eslint": "^10.4.0",
     "typescript": "~6.0.3",

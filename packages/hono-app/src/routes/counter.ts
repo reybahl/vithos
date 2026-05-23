@@ -1,4 +1,4 @@
-import { db, sql } from "@repo/db";
+import { db, sql } from "@acme/db";
 import { Hono } from "hono";
 
 import { requireAuth, type AuthVariables } from "../auth-middleware";

@@ -15,7 +15,7 @@ const workerRequestDb = new AsyncLocalStorage<Kysely<DB>>();
 
 let workerRuntime = false;
 
-/** Called from `apps/worker` so `@repo/db` never falls back to Node pooling on Workers. */
+/** Called from `apps/worker` so `@acme/db` never falls back to Node pooling on Workers. */
 export function enableWorkerRuntime() {
   workerRuntime = true;
 }
@@ -45,7 +45,7 @@ function createNodeDb() {
   const connectionString = process.env.DATABASE_URL;
 
   if (!connectionString) {
-    throw new Error("DATABASE_URL must be set to use @repo/db.");
+    throw new Error("DATABASE_URL must be set to use @acme/db.");
   }
 
   const dialect = new PostgresDialect({
@@ -69,7 +69,7 @@ function resolveDb(): Kysely<DB> {
 
   if (workerRuntime) {
     throw new Error(
-      "@repo/db: database used outside runWithWorkerDatabase on Cloudflare Workers.",
+      "@acme/db: database used outside runWithWorkerDatabase on Cloudflare Workers.",
     );
   }
 

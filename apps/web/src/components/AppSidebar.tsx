@@ -12,14 +12,14 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "@repo/ui/components/avatar";
+} from "@acme/ui/components/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
+} from "@acme/ui/components/dropdown-menu";
 import {
   Sidebar,
   SidebarContent,
@@ -34,7 +34,7 @@ import {
   SidebarRail,
   SidebarTrigger,
   useSidebar,
-} from "@repo/ui/components/sidebar";
+} from "@acme/ui/components/sidebar";
 
 import { authClient } from "../lib/auth-client";
 
@@ -179,7 +179,7 @@ export function AppSidebar({
                     <LayoutDashboard className="size-4" />
                   </div>
                   <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-medium">vithos</span>
+                    <span className="truncate font-medium">acme</span>
                     <span className="truncate text-xs">Dashboard</span>
                   </div>
                 </Link>

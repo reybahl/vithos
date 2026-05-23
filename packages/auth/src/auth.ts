@@ -1,7 +1,7 @@
 import { kyselyAdapter } from "@better-auth/kysely-adapter";
 import { betterAuth } from "better-auth";
 
-import { db } from "@repo/db";
+import { db } from "@acme/db";
 
 import { hashPassword, verifyPassword } from "./password";
 

@@ -1,5 +1,5 @@
 import { defineConfig } from "eslint/config";
-import { reactLibrary, sharedIgnores } from "@repo/eslint-config";
+import { reactLibrary, sharedIgnores } from "@acme/eslint-config";
 
 export default defineConfig([
   sharedIgnores(),

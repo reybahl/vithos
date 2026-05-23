@@ -28,12 +28,12 @@ importers:
 
   apps/api:
     dependencies:
+      "@acme/hono-app":
+        specifier: workspace:*
+        version: link:../../packages/hono-app
       "@hono/node-server":
         specifier: ^2.0.3
         version: 2.0.3(hono@4.12.22)
-      "@repo/hono-app":
-        specifier: workspace:*
-        version: link:../../packages/hono-app
       "@t3-oss/env-core":
         specifier: ^0.13.11
         version: 0.13.11(typescript@6.0.3)(zod@4.4.3)
@@ -44,10 +44,10 @@ importers:
         specifier: ^4.4.3
         version: 4.4.3
     devDependencies:
-      "@repo/eslint-config":
+      "@acme/eslint-config":
         specifier: workspace:*
         version: link:../../tooling/eslint-config
-      "@repo/typescript":
+      "@acme/typescript":
         specifier: workspace:*
         version: link:../../tooling/typescript
       "@types/node":
@@ -71,10 +71,10 @@ importers:
 
   apps/web:
     dependencies:
-      "@repo/hono-app":
+      "@acme/hono-app":
         specifier: workspace:*
         version: link:../../packages/hono-app
-      "@repo/ui":
+      "@acme/ui":
         specifier: workspace:*
         version: link:../../packages/ui
       "@t3-oss/env-core":
@@ -108,10 +108,10 @@ importers:
         specifier: ^4.4.3
         version: 4.4.3
     devDependencies:
-      "@repo/eslint-config":
+      "@acme/eslint-config":
         specifier: workspace:*
         version: link:../../tooling/eslint-config
-      "@repo/typescript":
+      "@acme/typescript":
         specifier: workspace:*
         version: link:../../tooling/typescript
       "@tailwindcss/vite":
@@ -144,25 +144,25 @@ importers:
 
   apps/worker:
     dependencies:
-      "@repo/db":
+      "@acme/db":
         specifier: workspace:*
         version: link:../../packages/db
-      "@repo/hono-app":
+      "@acme/hono-app":
         specifier: workspace:*
         version: link:../../packages/hono-app
       hono:
         specifier: ^4.12.22
         version: 4.12.22
     devDependencies:
+      "@acme/eslint-config":
+        specifier: workspace:*
+        version: link:../../tooling/eslint-config
+      "@acme/typescript":
+        specifier: workspace:*
+        version: link:../../tooling/typescript
       "@cloudflare/workers-types":
         specifier: ^4.20260523.1
         version: 4.20260523.1
-      "@repo/eslint-config":
-        specifier: workspace:*
-        version: link:../../tooling/eslint-config
-      "@repo/typescript":
-        specifier: workspace:*
-        version: link:../../tooling/typescript
       dotenv-cli:
         specifier: ^11.0.0
         version: 11.0.0
@@ -178,20 +178,20 @@ importers:
 
   packages/auth:
     dependencies:
+      "@acme/db":
+        specifier: workspace:*
+        version: link:../db
       "@better-auth/kysely-adapter":
         specifier: ^1.6.11
         version: 1.6.11(@better-auth/core@1.6.11)(@better-auth/utils@0.4.0)(kysely@0.28.17)
-      "@repo/db":
-        specifier: workspace:*
-        version: link:../db
       better-auth:
         specifier: ^1.6.11
         version: 1.6.11(react-dom@19.2.6)(react@19.2.6)
     devDependencies:
-      "@repo/eslint-config":
+      "@acme/eslint-config":
         specifier: workspace:*
         version: link:../../tooling/eslint-config
-      "@repo/typescript":
+      "@acme/typescript":
         specifier: workspace:*
         version: link:../../tooling/typescript
       "@types/node":
@@ -213,10 +213,10 @@ importers:
         specifier: ^8.21.0
         version: 8.21.0
     devDependencies:
-      "@repo/eslint-config":
+      "@acme/eslint-config":
         specifier: workspace:*
         version: link:../../tooling/eslint-config
-      "@repo/typescript":
+      "@acme/typescript":
         specifier: workspace:*
         version: link:../../tooling/typescript
       "@types/pg":
@@ -240,15 +240,15 @@ importers:
 
   packages/hono-app:
     dependencies:
+      "@acme/auth":
+        specifier: workspace:*
+        version: link:../auth
+      "@acme/db":
+        specifier: workspace:*
+        version: link:../db
       "@hono/zod-validator":
         specifier: ^0.8.0
         version: 0.8.0(hono@4.12.22)(zod@4.4.3)
-      "@repo/auth":
-        specifier: workspace:*
-        version: link:../auth
-      "@repo/db":
-        specifier: workspace:*
-        version: link:../db
       hono:
         specifier: ^4.12.22
         version: 4.12.22
@@ -256,10 +256,10 @@ importers:
         specifier: ^4.4.3
         version: 4.4.3
     devDependencies:
-      "@repo/eslint-config":
+      "@acme/eslint-config":
         specifier: workspace:*
         version: link:../../tooling/eslint-config
-      "@repo/typescript":
+      "@acme/typescript":
         specifier: workspace:*
         version: link:../../tooling/typescript
       eslint:
@@ -302,10 +302,10 @@ importers:
         specifier: ^1.4.0
         version: 1.4.0
     devDependencies:
-      "@repo/eslint-config":
+      "@acme/eslint-config":
         specifier: workspace:*
         version: link:../../tooling/eslint-config
-      "@repo/typescript":
+      "@acme/typescript":
         specifier: workspace:*
         version: link:../../tooling/typescript
       "@types/react":

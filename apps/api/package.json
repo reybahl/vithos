@@ -13,14 +13,14 @@
   },
   "dependencies": {
     "@hono/node-server": "^2.0.3",
-    "@repo/hono-app": "workspace:*",
+    "@acme/hono-app": "workspace:*",
     "@t3-oss/env-core": "^0.13.11",
     "hono": "^4.12.22",
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
-    "@repo/typescript": "workspace:*",
+    "@acme/eslint-config": "workspace:*",
+    "@acme/typescript": "workspace:*",
     "@types/node": "^25.9.1",
     "dotenv-cli": "^11.0.0",
     "esbuild": "^0.28.0",
