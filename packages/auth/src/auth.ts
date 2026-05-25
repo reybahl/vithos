@@ -1,5 +1,6 @@
 import { kyselyAdapter } from "@better-auth/kysely-adapter";
 import { betterAuth } from "better-auth";
+import { v7 as uuidv7 } from "uuid";
 
 import { db } from "@acme/db";
 
@@ -29,6 +30,11 @@ function createAuth() {
     database: kyselyAdapter(db, {
       type: "postgres",
     }),
+    advanced: {
+      database: {
+        generateId: () => uuidv7(),
+      },
+    },
     emailAndPassword: {
       enabled: true,
       password: {
