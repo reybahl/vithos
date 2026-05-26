@@ -22,6 +22,25 @@ function trustedOriginsFromEnv(): string[] {
   );
 }
 
+/** Preview deploys use `*.pages.dev` + `*.workers.dev` (cross-site); default Lax cookies are not sent. */
+function crossSiteCookieOptions():
+  | {
+      useSecureCookies: true;
+      defaultCookieAttributes: { sameSite: "none"; secure: true };
+    }
+  | Record<string, never> {
+  if (process.env.AUTH_CROSS_SITE_COOKIES !== "true") {
+    return {};
+  }
+  return {
+    useSecureCookies: true,
+    defaultCookieAttributes: {
+      sameSite: "none",
+      secure: true,
+    },
+  };
+}
+
 function createAuth() {
   return betterAuth({
     secret: requireEnv("BETTER_AUTH_SECRET"),
@@ -34,6 +53,7 @@ function createAuth() {
       database: {
         generateId: () => uuidv7(),
       },
+      ...crossSiteCookieOptions(),
     },
     emailAndPassword: {
       enabled: true,
