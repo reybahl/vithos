@@ -9,20 +9,17 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  CF_PAGES_PROJECT_NAME: vithos
   WORKER_PREVIEW_ALIAS: pr-${{ github.event.pull_request.number }}
 
 jobs:
-  preview-worker:
-    name: Preview API (Worker)
+  preview:
+    name: Preview (Worker + SPA)
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     permissions:
       contents: read
       deployments: write
       pull-requests: write
-    outputs:
-      api_url: ${{ steps.resolve_api_url.outputs.url }}
     steps:
       - uses: actions/checkout@v4
 
@@ -37,14 +34,10 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - name: Compute Pages preview origin
-        id: pages_origin
-        run: |
-          BRANCH='${{ github.head_ref }}'
-          ALIAS=$(echo "$BRANCH" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+|-+$//g')
-          echo "url=https://${ALIAS}.${{ env.CF_PAGES_PROJECT_NAME }}.pages.dev" >> "$GITHUB_OUTPUT"
+      - name: Build web (same-origin /api on preview Worker)
+        run: pnpm --filter web build
 
-      - name: Upload Worker preview version
+      - name: Upload preview Worker (SPA + API)
         id: worker_initial
         uses: cloudflare/wrangler-action@v3
         with:
@@ -55,12 +48,13 @@ jobs:
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
           command: >-
             versions upload
+            --config wrangler.preview.toml
             --preview-alias ${{ env.WORKER_PREVIEW_ALIAS }}
             --keep-vars
             --message "Preview PR ${{ github.event.pull_request.number }}"
 
-      - name: Parse Worker preview alias URL
-        id: worker_initial_alias
+      - name: Parse preview URL
+        id: preview_url
         env:
           CMD_OUTPUT: ${{ steps.worker_initial.outputs.command-output }}
           FALLBACK_URL: ${{ steps.worker_initial.outputs.deployment-url }}
@@ -71,7 +65,7 @@ jobs:
           fi
           echo "url=$URL" >> "$GITHUB_OUTPUT"
 
-      - name: Configure Worker preview auth + CORS
+      - name: Configure preview auth (same-origin)
         id: worker
         uses: cloudflare/wrangler-action@v3
         with:
@@ -82,19 +76,19 @@ jobs:
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
           command: >-
             versions upload
+            --config wrangler.preview.toml
             --preview-alias ${{ env.WORKER_PREVIEW_ALIAS }}
             --keep-vars
-            --var BETTER_AUTH_URL:${{ steps.worker_initial_alias.outputs.url }}/
-            --var AUTH_CROSS_SITE_COOKIES:true
-            --var CORS_ALLOWED_ORIGINS:${{ steps.pages_origin.outputs.url }}
-            --var BETTER_AUTH_TRUSTED_ORIGINS:${{ steps.pages_origin.outputs.url }}
+            --var BETTER_AUTH_URL:${{ steps.preview_url.outputs.url }}/
+            --var CORS_ALLOWED_ORIGINS:${{ steps.preview_url.outputs.url }}
+            --var BETTER_AUTH_TRUSTED_ORIGINS:${{ steps.preview_url.outputs.url }}
             --message "Preview PR ${{ github.event.pull_request.number }} auth"
 
-      - name: Resolve API URL
-        id: resolve_api_url
+      - name: Resolve preview URL
+        id: resolve_preview_url
         env:
           CMD_OUTPUT: ${{ steps.worker.outputs.command-output }}
-          FALLBACK_URL: ${{ steps.worker_initial_alias.outputs.url }}
+          FALLBACK_URL: ${{ steps.preview_url.outputs.url }}
         run: |
           URL=$(printf '%s\n' "$CMD_OUTPUT" | sed -n 's/.*Version Preview Alias URL:[[:space:]]*\(https[^[:space:]]*\).*/\1/p' | head -1)
           if [ -z "$URL" ]; then
@@ -102,68 +96,23 @@ jobs:
           fi
           echo "url=$URL" >> "$GITHUB_OUTPUT"
 
-  preview-pages:
-    name: Preview Frontend (Pages)
-    if: github.event.pull_request.head.repo.full_name == github.repository
-    runs-on: ubuntu-latest
-    needs: [preview-worker]
-    permissions:
-      contents: read
-      deployments: write
-      pull-requests: write
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 8.15.6
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: pnpm
-
-      - run: pnpm install --frozen-lockfile
-
-      - name: Build web (preview)
-        run: pnpm --filter web build
-        env:
-          VITE_API_URL: ${{ needs.preview-worker.outputs.api_url }}/
-
-      - name: Deploy Pages preview
-        id: pages
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          packageManager: pnpm
-          workingDirectory: apps/worker
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          command: pages deploy ../web/dist --project-name=${{ env.CF_PAGES_PROJECT_NAME }} --branch=${{ github.head_ref }}
-
-      - name: Comment preview URLs on PR
+      - name: Comment preview URL on PR
         uses: actions/github-script@v7
         env:
-          WORKER_URL: ${{ needs.preview-worker.outputs.api_url }}
-          PAGES_URL: ${{ steps.pages.outputs.deployment-url }}
-          PAGES_ALIAS: ${{ steps.pages.outputs.pages-deployment-alias-url }}
+          PREVIEW_URL: ${{ steps.resolve_preview_url.outputs.url }}
         with:
           script: |
             const marker = "<!-- cloudflare-preview -->";
-            const workerUrl = process.env.WORKER_URL;
-            const pagesUrl = process.env.PAGES_ALIAS || process.env.PAGES_URL;
+            const previewUrl = process.env.PREVIEW_URL;
             const prNumber = context.payload.pull_request.number;
 
             const body = [
               marker,
               `### Cloudflare preview (PR #${prNumber})`,
               "",
-              "| App | URL |",
-              "| --- | --- |",
-              `| Frontend | ${pagesUrl} |`,
-              `| API | ${workerUrl} |`,
+              `**App:** ${previewUrl}`,
               "",
-              "Production is unchanged. Preview uses the production database and Worker secrets.",
+              "Single Worker URL serves the SPA and `/api/*` (same-origin auth). Production is unchanged.",
             ].join("\n");
 
             const { data: comments } = await github.rest.issues.listComments({
