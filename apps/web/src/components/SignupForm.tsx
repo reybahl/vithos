@@ -43,6 +43,7 @@ export function SignupForm({
         setErrorMessage(error.message ?? "Could not create account.");
         return;
       }
+      await authClient.getSession();
       if (redirectTo) {
         router.history.push(redirectTo);
       } else {
