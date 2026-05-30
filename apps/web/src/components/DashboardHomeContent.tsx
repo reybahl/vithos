@@ -34,25 +34,38 @@ export function DashboardHomeContent() {
       if (!res.ok) throw new Error("Increment failed");
       return res.json() as Promise<{ count: number }>;
     },
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: apiQueryKeys.counter });
+      const previous = queryClient.getQueryData<{ count: number }>(
+        apiQueryKeys.counter,
+      );
+      queryClient.setQueryData<{ count: number }>(
+        apiQueryKeys.counter,
+        (current) => ({ count: (current?.count ?? 0) + 1 }),
+      );
+      return { previous };
+    },
+    onError: (_error, _variables, context) => {
+      if (context?.previous !== undefined) {
+        queryClient.setQueryData(apiQueryKeys.counter, context.previous);
+      }
+      toast.error("Could not update the counter.");
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(apiQueryKeys.counter, data);
+    },
   });
 
-  async function incrementCounter() {
+  function incrementCounter() {
     if (session.isPending) return;
     if (!session.data?.user) {
       toast.error("Sign in to use the counter.");
       return;
     }
-    try {
-      const data = await incrementMutation.mutateAsync();
-      queryClient.setQueryData(apiQueryKeys.counter, data);
-    } catch {
-      toast.error("Could not update the counter.");
-    }
+    incrementMutation.mutate();
   }
 
-  const isCounterBusy =
-    (counterQuery.isPending && !counterQuery.isError) ||
-    incrementMutation.isPending;
+  const isCounterLoading = counterQuery.isPending && !counterQuery.isError;
   const countText = counterQuery.isError
     ? "-"
     : counterQuery.isPending
@@ -94,7 +107,7 @@ export function DashboardHomeContent() {
               type="button"
               variant="secondary"
               className="h-9 px-3"
-              disabled={isCounterBusy}
+              disabled={isCounterLoading}
               onClick={() => void incrementCounter()}
             >
               Increment
