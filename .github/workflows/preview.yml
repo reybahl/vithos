@@ -21,6 +21,9 @@ jobs:
       contents: read
       deployments: write
       pull-requests: write
+    environment:
+      name: preview
+      url: ${{ steps.worker.outputs.deployment-url }}
     steps:
       - uses: actions/checkout@v4
 
