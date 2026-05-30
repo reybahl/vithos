@@ -131,7 +131,7 @@ export function DashboardHomeContent() {
           target="_blank"
           rel="noreferrer"
         >
-          reybahl/vithos-stack
+          reybahl/vithos
         </a>
       </section>
     </div>

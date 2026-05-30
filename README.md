@@ -1,4 +1,4 @@
-# vithos-stack
+# Vithos
 
 pnpm + [Turborepo](https://turborepo.com) monorepo. The web UI is a standard [Vite](https://vite.dev) + **React** + **TypeScript** app.
 
