@@ -4,7 +4,7 @@ import { defineConfig } from "vite";
 
 import { env } from "./env/vite-node";
 
-/** Dev server only: ignored by `vite build`; prod uses `VITE_API_URL` / hosting. */
+/** Dev server only: `/api` is proxied to apps/api (same origin in the browser). */
 const apiTarget = `http://127.0.0.1:${env.API_PORT}`;
 
 // https://vite.dev/config/

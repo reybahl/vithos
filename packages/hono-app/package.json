@@ -4,8 +4,7 @@
   "private": true,
   "type": "module",
   "exports": {
-    "./app": "./src/app.ts",
-    "./cors-env": "./src/cors-env.ts"
+    "./app": "./src/app.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

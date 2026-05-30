@@ -1,11 +1,11 @@
-import { browserAllowedOrigins, env } from "./env";
+import { env } from "./env";
 
 import { createApp } from "@acme/hono-app/app";
 import { serve } from "@hono/node-server";
 
-const app = createApp({
-  getCorsAllowedOriginsCsv: () => browserAllowedOrigins,
-});
+process.env.BETTER_AUTH_URL ||= env.BETTER_AUTH_URL;
+
+const app = createApp();
 
 serve(
   {

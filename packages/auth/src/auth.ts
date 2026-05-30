@@ -15,30 +15,8 @@ function requireEnv(name: string): string {
 }
 
 function trustedOriginsFromEnv(): string[] {
-  return (
-    process.env.BETTER_AUTH_TRUSTED_ORIGINS?.split(",")
-      .map((origin) => origin.trim())
-      .filter(Boolean) ?? ["http://localhost:5173"]
-  );
-}
-
-/** Preview deploys use `*.pages.dev` + `*.workers.dev` (cross-site); default Lax cookies are not sent. */
-function crossSiteCookieOptions():
-  | {
-      useSecureCookies: true;
-      defaultCookieAttributes: { sameSite: "none"; secure: true };
-    }
-  | Record<string, never> {
-  if (process.env.AUTH_CROSS_SITE_COOKIES !== "true") {
-    return {};
-  }
-  return {
-    useSecureCookies: true,
-    defaultCookieAttributes: {
-      sameSite: "none",
-      secure: true,
-    },
-  };
+  const baseURL = requireEnv("BETTER_AUTH_URL");
+  return [new URL(baseURL).origin];
 }
 
 function createAuth() {
@@ -53,7 +31,6 @@ function createAuth() {
       database: {
         generateId: () => uuidv7(),
       },
-      ...crossSiteCookieOptions(),
     },
     emailAndPassword: {
       enabled: true,
