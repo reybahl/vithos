@@ -5,7 +5,7 @@ compatibility_flags = ["nodejs_compat", "nodejs_compat_populate_process_env"]
 
 # Postgres: Hyperdrive `vithos-db`. For Neon, origin must be the DIRECT connection string
 # (disable "pooling" in Neon UI)—not the `*-pooler.*` host. Hyperdrive pools; double poolers hang/break.
-# Workers use `pg` (per-request pool, max 1) via `env.HYPERDRIVE.connectionString` — do NOT set DATABASE_URL on the Worker.
+# Production: `env.HYPERDRIVE.connectionString`. Preview CI sets `DATABASE_URL` to a Neon branch (direct URL, no pooler).
 # Update origin: `wrangler hyperdrive update 8c4dcf21a5d24475a98a549dd4e9eb47 --connection-string="postgres://..."`
 # https://developers.cloudflare.com/hyperdrive/examples/neon/
 [[hyperdrive]]

@@ -32,6 +32,8 @@ type AppBindings = {
   BETTER_AUTH_TRUSTED_ORIGINS?: string;
   BETTER_AUTH_URL?: string;
   CORS_ALLOWED_ORIGINS?: string;
+  /** Preview CI only — direct Neon branch URL. Production uses Hyperdrive. */
+  DATABASE_URL?: string;
   HYPERDRIVE?: { connectionString: string };
   WEB_ORIGIN?: string;
 };
@@ -131,13 +133,15 @@ export default {
       process.env.AUTH_CROSS_SITE_COOKIES = env.AUTH_CROSS_SITE_COOKIES;
     }
 
-    const cs = env.HYPERDRIVE?.connectionString;
+    const cs =
+      nonEmpty(env.DATABASE_URL) ?? nonEmpty(env.HYPERDRIVE?.connectionString);
     if (!cs) {
       const headers = new Headers({ "Content-Type": "application/json" });
       setSecurityHeaders(headers);
       return new Response(
         JSON.stringify({
-          error: "HYPERDRIVE binding is not configured on this Worker.",
+          error:
+            "Database is not configured (set DATABASE_URL for preview or HYPERDRIVE for production).",
         }),
         { status: 500, headers },
       );

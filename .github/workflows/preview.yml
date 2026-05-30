@@ -10,6 +10,7 @@ concurrency:
 
 env:
   WORKER_PREVIEW_ALIAS: pr-${{ github.event.pull_request.number }}
+  NEON_PREVIEW_BRANCH: preview/pr-${{ github.event.pull_request.number }}
 
 jobs:
   preview:
@@ -34,6 +35,21 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
+      - name: Create Neon preview branch
+        id: neon
+        uses: neondatabase/create-branch-action@v5
+        with:
+          project_id: ${{ vars.NEON_PROJECT_ID }}
+          branch_name: ${{ env.NEON_PREVIEW_BRANCH }}
+          api_key: ${{ secrets.NEON_API_KEY }}
+          username: ${{ vars.NEON_DATABASE_USER }}
+          database: ${{ vars.NEON_DATABASE_NAME || 'neondb' }}
+
+      - name: Run migrations on preview branch
+        env:
+          DATABASE_URL: ${{ steps.neon.outputs.db_url }}
+        run: pnpm db:migrate:deploy
+
       - name: Build web (same-origin /api on preview Worker)
         run: pnpm --filter web build
 
@@ -51,6 +67,7 @@ jobs:
             --config wrangler.preview.toml
             --preview-alias ${{ env.WORKER_PREVIEW_ALIAS }}
             --keep-vars
+            --var DATABASE_URL:${{ steps.neon.outputs.db_url }}
             --message "Preview PR ${{ github.event.pull_request.number }}"
 
       - name: Parse preview URL
@@ -79,6 +96,7 @@ jobs:
             --config wrangler.preview.toml
             --preview-alias ${{ env.WORKER_PREVIEW_ALIAS }}
             --keep-vars
+            --var DATABASE_URL:${{ steps.neon.outputs.db_url }}
             --var BETTER_AUTH_URL:${{ steps.preview_url.outputs.url }}/
             --var CORS_ALLOWED_ORIGINS:${{ steps.preview_url.outputs.url }}
             --var BETTER_AUTH_TRUSTED_ORIGINS:${{ steps.preview_url.outputs.url }}
@@ -100,10 +118,12 @@ jobs:
         uses: actions/github-script@v7
         env:
           PREVIEW_URL: ${{ steps.resolve_preview_url.outputs.url }}
+          NEON_BRANCH: ${{ env.NEON_PREVIEW_BRANCH }}
         with:
           script: |
             const marker = "<!-- cloudflare-preview -->";
             const previewUrl = process.env.PREVIEW_URL;
+            const neonBranch = process.env.NEON_BRANCH;
             const prNumber = context.payload.pull_request.number;
 
             const body = [
@@ -111,6 +131,8 @@ jobs:
               `### Cloudflare preview (PR #${prNumber})`,
               "",
               `**App:** ${previewUrl}`,
+              "",
+              `Neon branch: \`${neonBranch}\` (copy of \`main\` at first open; migrations applied on each push).`,
               "",
               "Single Worker URL serves the SPA and `/api/*` (same-origin auth). Production is unchanged.",
             ].join("\n");
