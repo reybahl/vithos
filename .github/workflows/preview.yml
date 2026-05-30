@@ -128,9 +128,7 @@ jobs:
               "",
               `**App:** ${previewUrl}`,
               "",
-              `Neon branch: \`${neonBranch}\` (copy of \`main\` at first open; migrations applied on each push).`,
-              "",
-              "Single Worker URL serves the SPA and `/api/*` (same-origin auth).",
+              `Neon branch: \`${neonBranch}\` (copy of \`main\` at first open; migrations applied on each push).`,,
             ].join("\n");
 
             const { data: comments } = await github.rest.issues.listComments({
