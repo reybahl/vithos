@@ -20,7 +20,7 @@ Then run `pnpm run build` and `pnpm run lint` from the root to confirm the works
 
 - `apps/web` — Vite + React SPA
 - `apps/api` — local Node dev server for the Hono API
-- `apps/worker` — Cloudflare Worker deployment
+- `apps/worker` — Cloudflare Worker (SPA + API in production and preview)
 - `packages/*` — shared libraries (`auth`, `db`, `hono-app`, `ui`)
 - `tooling/typescript` — shared TSConfig presets (`base.json`, `react-library.json`, `vite.json`)
 - `tooling/eslint-config` — shared ESLint 10 flat config (`@repo/eslint-config`)
