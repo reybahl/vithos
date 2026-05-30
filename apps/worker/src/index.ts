@@ -28,7 +28,9 @@ function setSecurityHeaders(headers: Headers) {
 }
 
 type AppBindings = {
+  AUTH_CROSS_SITE_COOKIES?: string;
   BETTER_AUTH_TRUSTED_ORIGINS?: string;
+  BETTER_AUTH_URL?: string;
   CORS_ALLOWED_ORIGINS?: string;
   /** Preview CI only — direct Neon branch URL. Production uses Hyperdrive. */
   DATABASE_URL?: string;
@@ -122,6 +124,13 @@ export default {
     if (browserAllowedOrigins) {
       process.env.CORS_ALLOWED_ORIGINS ||= browserAllowedOrigins;
       process.env.BETTER_AUTH_TRUSTED_ORIGINS ||= browserAllowedOrigins;
+    }
+
+    if (nonEmpty(env.BETTER_AUTH_URL)) {
+      process.env.BETTER_AUTH_URL = env.BETTER_AUTH_URL;
+    }
+    if (nonEmpty(env.AUTH_CROSS_SITE_COOKIES)) {
+      process.env.AUTH_CROSS_SITE_COOKIES = env.AUTH_CROSS_SITE_COOKIES;
     }
 
     const cs =

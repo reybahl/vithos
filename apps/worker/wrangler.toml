@@ -12,9 +12,7 @@ compatibility_flags = ["nodejs_compat", "nodejs_compat_populate_process_env"]
 binding = "HYPERDRIVE"
 id = "8c4dcf21a5d24475a98a549dd4e9eb47"
 
-# Set account_id via `wrangler whoami` output, env CF_ACCOUNT_ID, or the deploy action.
-# Browser CORS: `CORS_ALLOWED_ORIGINS` (e.g. `https://vithos.reybahl.com`) in Dashboard.
-# Attach a custom domain (e.g. `api.vithos.reybahl.com`); set `BETTER_AUTH_URL` + GitHub `API_URL` to match.
+# Production: API only (frontend on Pages). Preview CI uses wrangler.preview.toml (SPA + API).
 
 # https://developers.cloudflare.com/workers/observability/logs/workers-logs/
 [observability]
