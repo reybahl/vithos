@@ -3,10 +3,20 @@ name: CD
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
+  cd-disabled:
+    name: CD disabled
+    if: vars.CD_ENABLED != 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "::notice title=CD disabled::Deployments are off. To enable CD, delete this \`cd-disabled\` job and remove every \`if: vars.CD_ENABLED\` condition in this file — that is simpler than setting a \`CD_ENABLED\` repository variable. If you do not use CD, delete this workflow file."
+
   db-migrate:
     name: Database migrations
+    if: vars.CD_ENABLED == 'true'
     runs-on: ubuntu-latest
     environment: production
     steps:
@@ -33,6 +43,7 @@ jobs:
 
   worker:
     name: Deploy to Cloudflare (Worker + SPA)
+    if: vars.CD_ENABLED == 'true'
     runs-on: ubuntu-latest
     needs: [db-migrate]
     steps:

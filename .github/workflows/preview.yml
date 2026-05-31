@@ -13,9 +13,17 @@ env:
   NEON_PREVIEW_BRANCH: preview/pr-${{ github.event.pull_request.number }}
 
 jobs:
+  cd-disabled:
+    name: CD disabled
+    if: vars.CD_ENABLED != 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "::notice title=CD disabled::Deployments are off. To enable CD, delete this \`cd-disabled\` job and remove every \`if: vars.CD_ENABLED\` condition in this file — that is simpler than setting a \`CD_ENABLED\` repository variable. If you do not use CD, delete this workflow file."
+
   preview:
     name: Preview (Worker + SPA)
-    if: github.event.pull_request.head.repo.full_name == github.repository
+    if: vars.CD_ENABLED == 'true' && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -131,7 +139,7 @@ jobs:
               "",
               `**App:** ${previewUrl}`,
               "",
-              `Neon branch: \`${neonBranch}\` (copy of \`main\` at first open; migrations applied on each push).`,,
+              `Neon branch: \`${neonBranch}\` (copy of \`main\` at first open; migrations applied on each push).`,
             ].join("\n");
 
             const { data: comments } = await github.rest.issues.listComments({
