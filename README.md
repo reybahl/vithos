@@ -4,6 +4,8 @@
 
 ## Stack
 
+Raed more about the architectural choices behind the stack [here](https://blog.reybahl.com/posts/designing-the-vithos-stack/)!
+
 | Layer        | Tech                                                                                                                | Role                                                                           |
 | ------------ | ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
 | **Frontend** | [Vite](https://vite.dev) 8, React 19, [TanStack Router](https://tanstack.com/router) & Query                        | SPA, file-based routes, typed data fetching                                    |
