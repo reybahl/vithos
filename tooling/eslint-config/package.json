@@ -16,5 +16,8 @@
   },
   "peerDependencies": {
     "eslint": "^10.0.0"
+  },
+  "devDependencies": {
+    "eslint-plugin-react-doctor": "^0.5.8"
   }
 }
