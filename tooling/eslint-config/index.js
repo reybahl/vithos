@@ -1,6 +1,5 @@
 import js from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier/flat";
-import reactDoctor from "eslint-plugin-react-doctor";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
@@ -54,7 +53,6 @@ export function reactLibrary({
       js.configs.recommended,
       ...tseslint.configs.recommended,
       reactHooks.configs.flat.recommended,
-      reactDoctor.configs.recommended,
       eslintConfigPrettier,
     ],
     languageOptions: languageOptions({
@@ -77,8 +75,6 @@ export function reactTypeScript({
       ...tseslint.configs.recommended,
       reactHooks.configs.flat.recommended,
       reactRefresh.configs.vite,
-      reactDoctor.configs.recommended,
-      reactDoctor.configs["tanstack-query"],
       eslintConfigPrettier,
     ],
     languageOptions: languageOptions({

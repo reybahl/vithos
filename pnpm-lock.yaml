@@ -135,6 +135,9 @@ importers:
       eslint:
         specifier: ^10.4.0
         version: 10.4.0
+      eslint-plugin-react-doctor:
+        specifier: ^0.5.8
+        version: 0.5.8
       typescript:
         specifier: ~6.0.3
         version: 6.0.3
@@ -347,10 +350,6 @@ importers:
       typescript-eslint:
         specifier: ^8.59.4
         version: 8.59.4(eslint@10.4.0)(typescript@6.0.3)
-    devDependencies:
-      eslint-plugin-react-doctor:
-        specifier: ^0.5.8
-        version: 0.5.8
 
   tooling/typescript: {}
 
