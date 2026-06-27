@@ -8,6 +8,32 @@ import { cn } from "@acme/ui/lib/utils";
 import { authClient } from "../lib/auth-client";
 import { AuthFormHeader } from "./AuthShared";
 
+type SubmitState = {
+  errorMessage: string | null;
+  isPending: boolean;
+};
+
+type SubmitAction =
+  | { type: "CLEAR_ERROR" }
+  | { type: "START_PENDING" }
+  | { type: "SET_ERROR"; message: string }
+  | { type: "FINISH" };
+
+function submitReducer(state: SubmitState, action: SubmitAction): SubmitState {
+  switch (action.type) {
+    case "CLEAR_ERROR":
+      return { ...state, errorMessage: null };
+    case "START_PENDING":
+      return { ...state, errorMessage: null, isPending: true };
+    case "SET_ERROR":
+      return { ...state, errorMessage: action.message };
+    case "FINISH":
+      return { ...state, isPending: false };
+    default:
+      return state;
+  }
+}
+
 export function SignupForm({
   className,
   redirectTo,
@@ -19,19 +45,21 @@ export function SignupForm({
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
-  const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
-  const [isPending, setIsPending] = React.useState(false);
+  const [submit, dispatch] = React.useReducer(submitReducer, {
+    errorMessage: null,
+    isPending: false,
+  });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setErrorMessage(null);
+    dispatch({ type: "CLEAR_ERROR" });
 
     if (password !== confirmPassword) {
-      setErrorMessage("Passwords do not match.");
+      dispatch({ type: "SET_ERROR", message: "Passwords do not match." });
       return;
     }
 
-    setIsPending(true);
+    dispatch({ type: "START_PENDING" });
     try {
       const { error } = await authClient.signUp.email({
         name: name.trim(),
@@ -40,7 +68,10 @@ export function SignupForm({
         callbackURL: "/dashboard",
       });
       if (error) {
-        setErrorMessage(error.message ?? "Could not create account.");
+        dispatch({
+          type: "SET_ERROR",
+          message: error.message ?? "Could not create account.",
+        });
         return;
       }
       await authClient.getSession();
@@ -50,7 +81,7 @@ export function SignupForm({
         void navigate({ to: "/dashboard" });
       }
     } finally {
-      setIsPending(false);
+      dispatch({ type: "FINISH" });
     }
   };
 
@@ -65,9 +96,9 @@ export function SignupForm({
         description="Enter your details below to create your account"
       />
       <div className="grid gap-6">
-        {errorMessage ? (
+        {submit.errorMessage ? (
           <p role="alert" className="text-destructive text-sm font-medium">
-            {errorMessage}
+            {submit.errorMessage}
           </p>
         ) : null}
         <div className="grid gap-2">
@@ -80,7 +111,7 @@ export function SignupForm({
             placeholder="Ada Lovelace"
             value={name}
             onChange={(ev) => setName(ev.target.value)}
-            disabled={isPending}
+            disabled={submit.isPending}
             required
           />
         </div>
@@ -94,7 +125,7 @@ export function SignupForm({
             placeholder="m@example.com"
             value={email}
             onChange={(ev) => setEmail(ev.target.value)}
-            disabled={isPending}
+            disabled={submit.isPending}
             required
           />
         </div>
@@ -107,7 +138,7 @@ export function SignupForm({
             autoComplete="new-password"
             value={password}
             onChange={(ev) => setPassword(ev.target.value)}
-            disabled={isPending}
+            disabled={submit.isPending}
             required
             minLength={8}
           />
@@ -121,7 +152,7 @@ export function SignupForm({
             autoComplete="new-password"
             value={confirmPassword}
             onChange={(ev) => setConfirmPassword(ev.target.value)}
-            disabled={isPending}
+            disabled={submit.isPending}
             required
             minLength={8}
           />
@@ -130,9 +161,9 @@ export function SignupForm({
           type="submit"
           variant="default"
           className="w-full"
-          disabled={isPending}
+          disabled={submit.isPending}
         >
-          {isPending ? "Creating account…" : "Create account"}
+          {submit.isPending ? "Creating account…" : "Create account"}
         </Button>
       </div>
       <div className="text-center text-sm">

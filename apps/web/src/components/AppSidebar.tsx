@@ -87,6 +87,11 @@ function NavMain() {
   );
 }
 
+async function handleSignOut() {
+  await authClient.signOut();
+  window.location.assign("/signin");
+}
+
 function NavUser({
   user,
   isAuthenticated,
@@ -99,11 +104,6 @@ function NavUser({
   isAuthenticated: boolean;
 }) {
   const { isMobile } = useSidebar();
-
-  async function handleSignOut() {
-    await authClient.signOut();
-    window.location.assign("/signin");
-  }
 
   return (
     <SidebarMenu>

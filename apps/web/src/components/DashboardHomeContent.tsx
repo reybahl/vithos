@@ -10,7 +10,11 @@ export function DashboardHomeContent() {
   const session = authClient.useSession();
   const queryClient = useQueryClient();
 
-  const healthQuery = useQuery({
+  const {
+    isPending: healthIsPending,
+    isError: healthIsError,
+    data: healthData,
+  } = useQuery({
     queryKey: apiQueryKeys.health,
     queryFn: async () => {
       const res = await apiClient.api.health.$get();
@@ -19,7 +23,11 @@ export function DashboardHomeContent() {
     },
   });
 
-  const counterQuery = useQuery({
+  const {
+    isPending: counterIsPending,
+    isError: counterIsError,
+    data: counterData,
+  } = useQuery({
     queryKey: apiQueryKeys.counter,
     queryFn: async () => {
       const res = await apiClient.api.counter.$get();
@@ -65,17 +73,17 @@ export function DashboardHomeContent() {
     incrementMutation.mutate();
   }
 
-  const isCounterLoading = counterQuery.isPending && !counterQuery.isError;
-  const countText = counterQuery.isError
+  const isCounterLoading = counterIsPending && !counterIsError;
+  const countText = counterIsError
     ? "-"
-    : counterQuery.isPending
+    : counterIsPending
       ? "..."
-      : String(counterQuery.data?.count ?? 0);
-  const healthText = healthQuery.isPending
+      : String(counterData?.count ?? 0);
+  const healthText = healthIsPending
     ? "Checking"
-    : healthQuery.isError
+    : healthIsError
       ? "Unreachable"
-      : healthQuery.data?.ok
+      : healthData?.ok
         ? "Healthy"
         : "Unexpected";
 

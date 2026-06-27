@@ -3,6 +3,7 @@ import { Link, useNavigate, useRouter } from "@tanstack/react-router";
 import { Button } from "@acme/ui/components/button";
 import { Input } from "@acme/ui/components/input";
 import { Label } from "@acme/ui/components/label";
+import { toast } from "@acme/ui/components/sonner";
 import { cn } from "@acme/ui/lib/utils";
 
 import { authClient } from "../lib/auth-client";
@@ -93,12 +94,13 @@ export function LoginForm({
             disabled={isPending}
             required
           />
-          <a
-            href="#"
+          <button
+            type="button"
+            onClick={() => toast.info("Password reset isn't available yet.")}
             className="text-muted-foreground col-start-2 row-start-1 justify-self-end self-center text-xs font-medium underline-offset-4 hover:underline"
           >
             Forgot your password?
-          </a>
+          </button>
         </div>
         <Button
           type="submit"
