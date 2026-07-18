@@ -173,9 +173,10 @@ jobs:
 
             const descriptionBlock = [
               descriptionStart,
-              "### Preview",
-              "",
-              `[Open preview](${previewUrl})`,
+              "> [!NOTE]",
+              `> **Cloudflare preview (PR [#${prNumber}](${context.payload.pull_request.html_url}))**`,
+              ">",
+              `> **App:** [${previewUrl}](${previewUrl})`,
               descriptionEnd,
             ].join("\n");
             const currentDescription = context.payload.pull_request.body ?? "";
