@@ -8,7 +8,7 @@
     ".": "./src/auth.ts"
   },
   "scripts": {
-    "lint": "eslint .",
+    "lint": "oxlint .",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -18,10 +18,8 @@
     "uuid": "^14.0.0"
   },
   "devDependencies": {
-    "@acme/eslint-config": "workspace:*",
     "@acme/typescript": "workspace:*",
     "@types/node": "^25.9.1",
-    "eslint": "^10.4.0",
-    "typescript": "~6.0.3"
+    "typescript": "~7.0.2"
   }
 }

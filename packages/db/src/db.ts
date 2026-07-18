@@ -68,9 +68,7 @@ function resolveDb(): Kysely<DB> {
   }
 
   if (workerRuntime) {
-    throw new Error(
-      "@acme/db: database used outside runWithWorkerDatabase on Cloudflare Workers.",
-    );
+    throw new Error("@acme/db: database used outside runWithWorkerDatabase on Cloudflare Workers.");
   }
 
   if (process.env.NODE_ENV !== "production") {

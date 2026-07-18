@@ -1,18 +1,8 @@
 import * as React from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import {
-  ChevronsUpDown,
-  LayoutDashboard,
-  LogIn,
-  LogOut,
-  Settings,
-} from "lucide-react";
+import { ChevronsUpDown, LayoutDashboard, LogIn, LogOut, Settings } from "lucide-react";
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@acme/ui/components/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@acme/ui/components/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -50,8 +40,7 @@ function NavMain() {
   const pathname = useRouterState({
     select: (state) => state.location.pathname,
   });
-  const isDashboardActive =
-    pathname === "/dashboard" || pathname.startsWith("/dashboard/");
+  const isDashboardActive = pathname === "/dashboard" || pathname.startsWith("/dashboard/");
 
   return (
     <SidebarGroup>
@@ -74,10 +63,7 @@ function NavMain() {
           </SidebarMenuButton>
         </SidebarMenuItem>
         <SidebarMenuItem className="transition-colors hover:bg-sidebar-primary/8">
-          <SidebarMenuButton
-            tooltip="Settings (coming soon)"
-            className="h-9 text-sm"
-          >
+          <SidebarMenuButton tooltip="Settings (coming soon)" className="h-9 text-sm">
             <Settings />
             <span>Settings</span>
           </SidebarMenuButton>
@@ -112,9 +98,7 @@ function NavUser({
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton size="lg">
               <Avatar className="h-8 w-8 rounded-lg">
-                {user.avatar ? (
-                  <AvatarImage src={user.avatar} alt={user.name} />
-                ) : null}
+                {user.avatar ? <AvatarImage src={user.avatar} alt={user.name} /> : null}
                 <AvatarFallback className="rounded-lg">
                   {initialsFromName(user.name)}
                 </AvatarFallback>
@@ -139,9 +123,7 @@ function NavUser({
                   Log out
                 </DropdownMenuItem>
               ) : (
-                <DropdownMenuItem
-                  onClick={() => window.location.assign("/signin")}
-                >
+                <DropdownMenuItem onClick={() => window.location.assign("/signin")}>
                   <LogIn />
                   Sign in
                 </DropdownMenuItem>

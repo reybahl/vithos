@@ -1,4 +1,4 @@
 {
   "extends": "@acme/typescript/base.json",
-  "include": ["src/**/*.ts", "prisma.config.ts", "eslint.config.js"]
+  "include": ["src/**/*.ts", "prisma.config.ts"]
 }
