@@ -5,6 +5,14 @@ import { toast } from "@acme/ui/components/sonner";
 import { apiClient } from "../lib/api-client";
 import { apiQueryKeys } from "../lib/api-query-keys";
 import { authClient } from "../lib/auth-client";
+import {
+  decrementCounterCache,
+  incrementCounterCache,
+  isLastCounterMutation,
+  type CounterData,
+} from "../lib/counter-cache";
+
+const counterIncrementMutationKey = ["counter", "increment"] as const;
 
 export function DashboardHomeContent() {
   const session = authClient.useSession();
@@ -32,35 +40,44 @@ export function DashboardHomeContent() {
     queryFn: async () => {
       const res = await apiClient.api.counter.$get();
       if (!res.ok) throw new Error("Counter fetch failed");
-      return res.json() as Promise<{ count: number }>;
+      return res.json() as Promise<CounterData>;
     },
   });
 
   const incrementMutation = useMutation({
+    mutationKey: counterIncrementMutationKey,
     mutationFn: async () => {
       const res = await apiClient.api.counter.increment.$post();
       if (!res.ok) throw new Error("Increment failed");
-      return res.json() as Promise<{ count: number }>;
+      return res.json() as Promise<CounterData>;
     },
     onMutate: async () => {
       await queryClient.cancelQueries({ queryKey: apiQueryKeys.counter });
-      const previous = queryClient.getQueryData<{ count: number }>(
+      queryClient.setQueryData<CounterData>(
         apiQueryKeys.counter,
+        incrementCounterCache,
       );
-      queryClient.setQueryData<{ count: number }>(
-        apiQueryKeys.counter,
-        (current) => ({ count: (current?.count ?? 0) + 1 }),
-      );
-      return { previous };
     },
-    onError: (_error, _variables, context) => {
-      if (context?.previous !== undefined) {
-        queryClient.setQueryData(apiQueryKeys.counter, context.previous);
-      }
+    onError: () => {
+      queryClient.setQueryData<CounterData>(
+        apiQueryKeys.counter,
+        decrementCounterCache,
+      );
       toast.error("Could not update the counter.");
     },
-    onSuccess: (data) => {
-      queryClient.setQueryData(apiQueryKeys.counter, data);
+    onSettled: () => {
+      // A success response contains the count at the instant that one request
+      // committed. With overlapping clicks, using it here can overwrite later
+      // optimistic increments. Reconcile once every local increment has settled.
+      if (
+        isLastCounterMutation(
+          queryClient.isMutating({
+            mutationKey: counterIncrementMutationKey,
+          }),
+        )
+      ) {
+        void queryClient.invalidateQueries({ queryKey: apiQueryKeys.counter });
+      }
     },
   });
 
