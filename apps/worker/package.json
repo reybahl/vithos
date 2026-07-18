@@ -4,24 +4,40 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "with-env": "dotenv -e .env --",
-    "dev": "pnpm with-env wrangler dev",
-    "deploy": "wrangler deploy",
-    "typecheck": "tsc --noEmit",
+    "dev": "vite",
+    "build": "pnpm typecheck && vite build",
+    "preview": "vite preview",
+    "deploy": "pnpm build && wrangler deploy",
+    "typecheck": "tsc -b --noEmit",
     "lint": "eslint ."
   },
   "dependencies": {
     "@acme/db": "workspace:*",
     "@acme/hono-app": "workspace:*",
-    "hono": "^4.12.22"
+    "@acme/ui": "workspace:*",
+    "@tanstack/react-query": "^5.100.13",
+    "@tanstack/react-router": "^1.170.7",
+    "better-auth": "^1.6.11",
+    "hono": "^4.12.22",
+    "lucide-react": "^1.16.0",
+    "next-themes": "^0.4.6",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20260523.1",
+    "@cloudflare/workers-types": "^5.20260714.1",
+    "@cloudflare/vite-plugin": "^1.45.1",
     "@acme/eslint-config": "workspace:*",
     "@acme/typescript": "workspace:*",
-    "dotenv-cli": "^11.0.0",
+    "@tailwindcss/vite": "^4.3.0",
+    "@types/node": "^25.9.1",
+    "@types/react": "^19.2.15",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.2",
     "eslint": "^10.4.0",
+    "eslint-plugin-react-doctor": "^0.5.8",
     "typescript": "~6.0.3",
-    "wrangler": "^4.94.0"
+    "vite": "^8.0.14",
+    "wrangler": "^4.112.0"
   }
 }

@@ -23,7 +23,7 @@ Production: Cloudflare Worker (API + static SPA). Postgres via Hyperdrive. CI on
    ```sh
    cd apps/worker && pnpm wrangler secret put BETTER_AUTH_SECRET
    ```
-6. Optional first deploy: `pnpm wrangler deploy` (CI will deploy later too).
+6. Optional first deploy: `pnpm --filter worker deploy` (CI will deploy later too).
 
 ## 3. Hyperdrive
 
@@ -72,7 +72,7 @@ Alternatively set repository variable `CD_ENABLED` = `true` (keeping the guards)
 
 Create GitHub environments **`production`** and **`preview`** if you use PR previews (workflows reference them).
 
-Push to `main` → migrate (`pnpm db:migrate:deploy`) → build web → `wrangler deploy`.
+Push to `main` → migrate (`pnpm db:migrate:deploy`) → build Worker + SPA → `wrangler deploy`.
 
 ## Checklist
 
