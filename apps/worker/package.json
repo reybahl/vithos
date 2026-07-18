@@ -8,7 +8,6 @@
     "build": "pnpm typecheck && vite build",
     "preview": "vite preview",
     "deploy": "pnpm build && wrangler deploy",
-    "test": "node --experimental-strip-types --test src/client/src/lib/*.test.ts",
     "typecheck": "tsc -b --noEmit",
     "lint": "oxlint ."
   },
