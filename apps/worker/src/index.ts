@@ -24,6 +24,7 @@ function setSecurityHeaders(headers: Headers) {
 type AppBindings = {
   BETTER_AUTH_SECRET?: string;
   BETTER_AUTH_URL?: string;
+  BETTER_AUTH_TRUSTED_ORIGINS?: string;
   /** Preview CI only — direct Neon branch URL. Production uses Hyperdrive. */
   DATABASE_URL?: string;
   HYPERDRIVE?: { connectionString: string };
@@ -51,6 +52,9 @@ export default {
     }
     if (nonEmpty(env.BETTER_AUTH_URL)) {
       process.env.BETTER_AUTH_URL = env.BETTER_AUTH_URL;
+    }
+    if (nonEmpty(env.BETTER_AUTH_TRUSTED_ORIGINS)) {
+      process.env.BETTER_AUTH_TRUSTED_ORIGINS = env.BETTER_AUTH_TRUSTED_ORIGINS;
     }
 
     const cs = nonEmpty(env.DATABASE_URL) ?? nonEmpty(env.HYPERDRIVE?.connectionString);

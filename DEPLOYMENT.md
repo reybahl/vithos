@@ -63,12 +63,13 @@ Alternatively set repository variable `CD_ENABLED` = `true` (keeping the guards)
 
 **Variables** (repository variables; same settings page):
 
-| Variable             | Value                                               |
-| -------------------- | --------------------------------------------------- |
-| `WEB_ORIGIN`         | Public app URL, e.g. `https://your-app.example.com` |
-| `NEON_PROJECT_ID`    | Neon project id (previews only)                     |
-| `NEON_DATABASE_USER` | Neon role, e.g. `neondb_owner` (previews only)      |
-| `NEON_DATABASE_NAME` | Optional; defaults to `neondb` in workflow          |
+| Variable                      | Value                                                           |
+| ----------------------------- | --------------------------------------------------------------- |
+| `WEB_ORIGIN`                  | Public app URL, e.g. `https://your-app.example.com`             |
+| `BETTER_AUTH_TRUSTED_ORIGINS` | `https://*-vithos.bahl-reyansh.workers.dev` (preview URLs only) |
+| `NEON_PROJECT_ID`             | Neon project id (previews only)                                 |
+| `NEON_DATABASE_USER`          | Neon role, e.g. `neondb_owner` (previews only)                  |
+| `NEON_DATABASE_NAME`          | Optional; defaults to `neondb` in workflow                      |
 
 Create GitHub environments **`production`** and **`preview`** if you use PR previews (workflows reference them).
 
@@ -79,6 +80,6 @@ Push to `main` → migrate (`pnpm db:migrate:deploy`) → build Worker + SPA →
 - [ ] Neon (or Postgres) direct URL in Hyperdrive + GitHub `DATABASE_URL`
 - [ ] `wrangler.toml` Worker name + Hyperdrive id
 - [ ] `BETTER_AUTH_SECRET` on Worker
-- [ ] `WEB_ORIGIN` + Cloudflare token/account secrets on GitHub
+- [ ] `WEB_ORIGIN`, `BETTER_AUTH_TRUSTED_ORIGINS` for previews, + Cloudflare token/account secrets on GitHub
 - [ ] Workflows enabled (remove `cd-disabled` / `if: vars.CD_ENABLED` or set `CD_ENABLED`)
 - [ ] Preview vars/secrets — or delete preview workflows

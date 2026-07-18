@@ -107,6 +107,7 @@ jobs:
             --keep-vars
             --var DATABASE_URL:${{ steps.neon.outputs.db_url }}
             --var BETTER_AUTH_URL:${{ steps.preview_url.outputs.url }}/
+            --var BETTER_AUTH_TRUSTED_ORIGINS:${{ vars.BETTER_AUTH_TRUSTED_ORIGINS }}
             --message "Preview PR ${{ github.event.pull_request.number }} auth"
 
       - name: Resolve preview URL
@@ -121,7 +122,7 @@ jobs:
           fi
           echo "url=$URL" >> "$GITHUB_OUTPUT"
 
-      - name: Comment preview URL on PR
+      - name: Publish preview URL on PR
         uses: actions/github-script@v7
         env:
           PREVIEW_URL: ${{ steps.resolve_preview_url.outputs.url }}
@@ -129,6 +130,8 @@ jobs:
         with:
           script: |
             const marker = "<!-- cloudflare-preview -->";
+            const descriptionStart = "<!-- cloudflare-preview-description:start -->";
+            const descriptionEnd = "<!-- cloudflare-preview-description:end -->";
             const previewUrl = process.env.PREVIEW_URL;
             const neonBranch = process.env.NEON_BRANCH;
             const prNumber = context.payload.pull_request.number;
@@ -167,3 +170,28 @@ jobs:
                 body,
               });
             }
+
+            const descriptionBlock = [
+              descriptionStart,
+              "> [!NOTE]",
+              `> **Cloudflare preview (PR [#${prNumber}](${context.payload.pull_request.html_url}))**`,
+              ">",
+              `> **App:** [${previewUrl}](${previewUrl})`,
+              descriptionEnd,
+            ].join("\n");
+            const currentDescription = context.payload.pull_request.body ?? "";
+            const startIndex = currentDescription.indexOf(descriptionStart);
+            const endIndex = currentDescription.indexOf(descriptionEnd, startIndex);
+            const descriptionWithoutPreview =
+              startIndex >= 0 && endIndex >= startIndex
+                ? `${currentDescription.slice(0, startIndex)}${currentDescription.slice(
+                    endIndex + descriptionEnd.length,
+                  )}`.trim()
+                : currentDescription.trim();
+
+            await github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber,
+              body: [descriptionWithoutPreview, descriptionBlock].filter(Boolean).join("\n\n"),
+            });
