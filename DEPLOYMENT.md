@@ -40,12 +40,13 @@ Worker runtime uses `env.HYPERDRIVE` in production. Previews use `DATABASE_URL` 
 
 ## 4. Cloudflare / Worker settings
 
-| What                 | Where                                                                                                                                              |
-| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Hyperdrive binding   | `wrangler.toml` → `[[hyperdrive]]`                                                                                                                 |
-| `BETTER_AUTH_SECRET` | Worker secret (`wrangler secret put`)                                                                                                              |
-| `BETTER_AUTH_URL`    | Set on deploy by CI (`--var BETTER_AUTH_URL:…`) from `WEB_ORIGIN` — must match your public app URL (scheme + host, trailing `/` added in workflow) |
-| Custom domain        | Workers → your Worker → **Settings** → Domains & routes                                                                                            |
+| What                          | Where                                                                                                                                                                 |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Hyperdrive binding            | `wrangler.toml` → `[[hyperdrive]]`                                                                                                                                    |
+| `BETTER_AUTH_SECRET`          | Worker secret (`wrangler secret put`)                                                                                                                                 |
+| `BETTER_AUTH_URL`             | Set on deploy by CI (`--var BETTER_AUTH_URL:…`) from `WEB_ORIGIN` — must match your public app URL (scheme + host, trailing `/` added in workflow)                    |
+| `BETTER_AUTH_TRUSTED_ORIGINS` | Set on deploy by CI from the GitHub variable of the same name. Optional comma-separated origins/patterns for additional public hosts, such as immutable preview URLs. |
+| Custom domain                 | Workers → your Worker → **Settings** → Domains & routes                                                                                                               |
 
 ## 5. GitHub Actions
 
@@ -63,12 +64,13 @@ Alternatively set repository variable `CD_ENABLED` = `true` (keeping the guards)
 
 **Variables** (repository variables; same settings page):
 
-| Variable             | Value                                               |
-| -------------------- | --------------------------------------------------- |
-| `WEB_ORIGIN`         | Public app URL, e.g. `https://your-app.example.com` |
-| `NEON_PROJECT_ID`    | Neon project id (previews only)                     |
-| `NEON_DATABASE_USER` | Neon role, e.g. `neondb_owner` (previews only)      |
-| `NEON_DATABASE_NAME` | Optional; defaults to `neondb` in workflow          |
+| Variable                      | Value                                                                     |
+| ----------------------------- | ------------------------------------------------------------------------- |
+| `WEB_ORIGIN`                  | Public app URL, e.g. `https://your-app.example.com`                       |
+| `BETTER_AUTH_TRUSTED_ORIGINS` | Optional comma-separated Better Auth origin patterns for additional hosts |
+| `NEON_PROJECT_ID`             | Neon project id (previews only)                                           |
+| `NEON_DATABASE_USER`          | Neon role, e.g. `neondb_owner` (previews only)                            |
+| `NEON_DATABASE_NAME`          | Optional; defaults to `neondb` in workflow                                |
 
 Create GitHub environments **`production`** and **`preview`** if you use PR previews (workflows reference them).
 
@@ -79,6 +81,6 @@ Push to `main` → migrate (`pnpm db:migrate:deploy`) → build Worker + SPA →
 - [ ] Neon (or Postgres) direct URL in Hyperdrive + GitHub `DATABASE_URL`
 - [ ] `wrangler.toml` Worker name + Hyperdrive id
 - [ ] `BETTER_AUTH_SECRET` on Worker
-- [ ] `WEB_ORIGIN` + Cloudflare token/account secrets on GitHub
+- [ ] `WEB_ORIGIN`, optional `BETTER_AUTH_TRUSTED_ORIGINS`, + Cloudflare token/account secrets on GitHub
 - [ ] Workflows enabled (remove `cd-disabled` / `if: vars.CD_ENABLED` or set `CD_ENABLED`)
 - [ ] Preview vars/secrets — or delete preview workflows

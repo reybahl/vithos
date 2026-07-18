@@ -78,6 +78,7 @@ jobs:
             --preview-alias ${{ env.WORKER_PREVIEW_ALIAS }}
             --keep-vars
             --var DATABASE_URL:${{ steps.neon.outputs.db_url }}
+            --var BETTER_AUTH_TRUSTED_ORIGINS:${{ vars.BETTER_AUTH_TRUSTED_ORIGINS }}
             --message "Preview PR ${{ github.event.pull_request.number }}"
 
       - name: Parse preview URL
@@ -107,6 +108,7 @@ jobs:
             --keep-vars
             --var DATABASE_URL:${{ steps.neon.outputs.db_url }}
             --var BETTER_AUTH_URL:${{ steps.preview_url.outputs.url }}/
+            --var BETTER_AUTH_TRUSTED_ORIGINS:${{ vars.BETTER_AUTH_TRUSTED_ORIGINS }}
             --message "Preview PR ${{ github.event.pull_request.number }} auth"
 
       - name: Resolve preview URL

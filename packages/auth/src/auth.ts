@@ -16,7 +16,12 @@ function requireEnv(name: string): string {
 
 function trustedOriginsFromEnv(): string[] {
   const baseURL = requireEnv("BETTER_AUTH_URL");
-  return [new URL(baseURL).origin];
+  const additionalOrigins = (process.env.BETTER_AUTH_TRUSTED_ORIGINS ?? "")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+
+  return [...new Set([new URL(baseURL).origin, ...additionalOrigins])];
 }
 
 function createAuth() {
