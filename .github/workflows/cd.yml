@@ -68,4 +68,3 @@ jobs:
           command: >-
             deploy
             --var BETTER_AUTH_URL:${{ vars.WEB_ORIGIN }}/
-            --var BETTER_AUTH_TRUSTED_ORIGINS:${{ vars.BETTER_AUTH_TRUSTED_ORIGINS }}
