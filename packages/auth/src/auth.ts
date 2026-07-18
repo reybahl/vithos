@@ -24,6 +24,16 @@ function trustedOriginsFromEnv(): string[] {
   return [...new Set([new URL(baseURL).origin, ...additionalOrigins])];
 }
 
+/** Public configuration only, for correlating rejected auth requests in Workers Logs. */
+export function authObservabilityConfig() {
+  const baseURL = requireEnv("BETTER_AUTH_URL");
+
+  return {
+    baseUrlOrigin: new URL(baseURL).origin,
+    trustedOrigins: trustedOriginsFromEnv(),
+  };
+}
+
 function createAuth() {
   return betterAuth({
     secret: requireEnv("BETTER_AUTH_SECRET"),

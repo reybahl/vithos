@@ -84,3 +84,20 @@ Push to `main` → migrate (`pnpm db:migrate:deploy`) → build Worker + SPA →
 - [ ] `WEB_ORIGIN`, optional `BETTER_AUTH_TRUSTED_ORIGINS`, + Cloudflare token/account secrets on GitHub
 - [ ] Workflows enabled (remove `cd-disabled` / `if: vars.CD_ENABLED` or set `CD_ENABLED`)
 - [ ] Preview vars/secrets — or delete preview workflows
+
+## Investigating production and preview logs
+
+Workers Logs is enabled at a 100% sample rate in `apps/worker/wrangler.toml`. Unlike `wrangler tail`, which only streams requests that happen after it connects, Workers Logs is persisted and can be searched for up to seven days.
+
+Use the Cloudflare dashboard (**Workers & Pages** → **vithos** → **Observability**) for an interactive investigation. The repository also provides a historical-query command:
+
+```sh
+# Keep these in your shell or secret manager, not in a Worker .env file.
+export CLOUDFLARE_API_TOKEN="..." # requires Workers Observability Write
+export CLOUDFLARE_ACCOUNT_ID="..."
+
+pnpm worker:logs -- --search auth_response_error
+pnpm worker:logs -- --minutes 120 --search "Invalid origin"
+```
+
+Auth responses with a 4xx/5xx status now emit an `auth_response_error` structured log. It includes only request and public origin configuration (method, path, host, `Origin`, referer origin, status, configured base origin, and trusted-origin patterns); it never logs credentials, cookies, request bodies, secrets, or exception messages. Query it by searching `auth_response_error` in the command above or Cloudflare’s Query Builder.

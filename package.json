@@ -13,7 +13,8 @@
     "postinstall": "pnpm db:generate",
     "db:generate": "pnpm --filter @acme/db run db:generate",
     "db:migrate": "pnpm --filter @acme/db run db:migrate",
-    "db:migrate:deploy": "pnpm --filter @acme/db run db:migrate:deploy"
+    "db:migrate:deploy": "pnpm --filter @acme/db run db:migrate:deploy",
+    "worker:logs": "node scripts/cloudflare-workers-logs.mjs"
   },
   "devDependencies": {
     "husky": "^9.1.7",
