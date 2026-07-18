@@ -86,11 +86,7 @@ export function SignupForm({
   };
 
   return (
-    <form
-      className={cn("grid gap-6", className)}
-      {...props}
-      onSubmit={handleSubmit}
-    >
+    <form className={cn("grid gap-6", className)} {...props} onSubmit={handleSubmit}>
       <AuthFormHeader
         title="Create an account"
         description="Enter your details below to create your account"
@@ -157,12 +153,7 @@ export function SignupForm({
             minLength={8}
           />
         </div>
-        <Button
-          type="submit"
-          variant="default"
-          className="w-full"
-          disabled={submit.isPending}
-        >
+        <Button type="submit" variant="default" className="w-full" disabled={submit.isPending}>
           {submit.isPending ? "Creating account…" : "Create account"}
         </Button>
       </div>

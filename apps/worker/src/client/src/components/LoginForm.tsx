@@ -47,11 +47,7 @@ export function LoginForm({
   };
 
   return (
-    <form
-      className={cn("grid gap-6", className)}
-      {...props}
-      onSubmit={handleSubmit}
-    >
+    <form className={cn("grid gap-6", className)} {...props} onSubmit={handleSubmit}>
       <AuthFormHeader
         title="Login to your account"
         description="Enter your email below to login to your account"
@@ -77,10 +73,7 @@ export function LoginForm({
           />
         </div>
         <div className="grid grid-cols-[1fr_auto] gap-2">
-          <Label
-            htmlFor="login-password"
-            className="col-start-1 row-start-1 self-center"
-          >
+          <Label htmlFor="login-password" className="col-start-1 row-start-1 self-center">
             Password
           </Label>
           <Input
@@ -102,12 +95,7 @@ export function LoginForm({
             Forgot your password?
           </button>
         </div>
-        <Button
-          type="submit"
-          variant="default"
-          className="w-full"
-          disabled={isPending}
-        >
+        <Button type="submit" variant="default" className="w-full" disabled={isPending}>
           {isPending ? "Signing in…" : "Login"}
         </Button>
       </div>

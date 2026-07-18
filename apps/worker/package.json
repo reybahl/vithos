@@ -1,7 +1,7 @@
 {
   "name": "worker",
-  "private": true,
   "version": "0.0.0",
+  "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "deploy": "pnpm build && wrangler deploy",
     "typecheck": "tsc -b --noEmit",
-    "lint": "eslint ."
+    "lint": "oxlint ."
   },
   "dependencies": {
     "@acme/db": "workspace:*",
@@ -25,18 +25,16 @@
     "react-dom": "^19.2.6"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^5.20260714.1",
-    "@cloudflare/vite-plugin": "^1.45.1",
-    "@acme/eslint-config": "workspace:*",
     "@acme/typescript": "workspace:*",
+    "@cloudflare/vite-plugin": "^1.45.1",
+    "@cloudflare/workers-types": "^5.20260714.1",
     "@tailwindcss/vite": "^4.3.0",
     "@types/node": "^25.9.1",
     "@types/react": "^19.2.15",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.2",
-    "eslint": "^10.4.0",
     "eslint-plugin-react-doctor": "^0.5.8",
-    "typescript": "~6.0.3",
+    "typescript": "~7.0.2",
     "vite": "^8.0.14",
     "wrangler": "^4.112.0"
   }

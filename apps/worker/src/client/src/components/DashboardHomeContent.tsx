@@ -44,13 +44,10 @@ export function DashboardHomeContent() {
     },
     onMutate: async () => {
       await queryClient.cancelQueries({ queryKey: apiQueryKeys.counter });
-      const previous = queryClient.getQueryData<{ count: number }>(
-        apiQueryKeys.counter,
-      );
-      queryClient.setQueryData<{ count: number }>(
-        apiQueryKeys.counter,
-        (current) => ({ count: (current?.count ?? 0) + 1 }),
-      );
+      const previous = queryClient.getQueryData<{ count: number }>(apiQueryKeys.counter);
+      queryClient.setQueryData<{ count: number }>(apiQueryKeys.counter, (current) => ({
+        count: (current?.count ?? 0) + 1,
+      }));
       return { previous };
     },
     onError: (_error, _variables, context) => {
@@ -91,24 +88,18 @@ export function DashboardHomeContent() {
     <div className="mx-auto w-full max-w-5xl space-y-8 text-foreground antialiased">
       <section className="space-y-2">
         <h1 className="text-3xl font-semibold tracking-tight">Dashboard</h1>
-        <p className="text-sm text-muted-foreground">
-          Minimal workspace. Live status only.
-        </p>
+        <p className="text-sm text-muted-foreground">Minimal workspace. Live status only.</p>
       </section>
 
       <section className="grid gap-4 md:grid-cols-2">
         <div className="border bg-background p-4">
-          <p className="text-xs uppercase tracking-wide text-muted-foreground">
-            API
-          </p>
+          <p className="text-xs uppercase tracking-wide text-muted-foreground">API</p>
           <p className="mt-2 text-2xl font-medium">{healthText}</p>
           <p className="mt-1 text-xs text-muted-foreground">/api/health</p>
         </div>
 
         <div className="border bg-background p-4">
-          <p className="text-xs uppercase tracking-wide text-muted-foreground">
-            Counter
-          </p>
+          <p className="text-xs uppercase tracking-wide text-muted-foreground">Counter</p>
           <div className="mt-2 flex items-center justify-between gap-3">
             <p className="text-2xl font-medium tabular-nums">{countText}</p>
             <Button
@@ -122,17 +113,13 @@ export function DashboardHomeContent() {
             </Button>
           </div>
           {!session.data?.user ? (
-            <p className="mt-2 text-xs text-muted-foreground">
-              Sign in required to update.
-            </p>
+            <p className="mt-2 text-xs text-muted-foreground">Sign in required to update.</p>
           ) : null}
         </div>
       </section>
 
       <section className="border bg-background p-4">
-        <p className="text-xs uppercase tracking-wide text-muted-foreground">
-          Repository
-        </p>
+        <p className="text-xs uppercase tracking-wide text-muted-foreground">Repository</p>
         <a
           className="mt-2 inline-flex items-center gap-2 font-mono text-sm text-primary hover:underline"
           href="https://github.com/reybahl/vithos"

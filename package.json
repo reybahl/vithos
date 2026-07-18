@@ -1,12 +1,13 @@
 {
+  "name": "vithos",
   "private": true,
   "scripts": {
     "build": "turbo run build --ui=stream",
     "dev": "turbo run dev",
     "lint": "turbo run lint --ui=stream",
     "typecheck": "turbo run typecheck --ui=stream",
-    "format": "prettier --check \"**/*.{js,mjs,cjs,ts,tsx,mts,cts,jsx,json,css,scss,md,mdx,yml,yaml,html}\"",
-    "format:fix": "prettier --write \"**/*.{js,mjs,cjs,ts,tsx,mts,cts,jsx,json,css,scss,md,mdx,yml,yaml,html}\"",
+    "format": "oxfmt --check .",
+    "format:fix": "oxfmt .",
     "lint-staged": "lint-staged",
     "prepare": "husky",
     "postinstall": "pnpm db:generate",
@@ -17,17 +18,17 @@
   "devDependencies": {
     "husky": "^9.1.7",
     "lint-staged": "^17.0.5",
-    "prettier": "^3.8.3",
+    "oxfmt": "0.59.0",
+    "oxlint": "1.74.0",
     "turbo": "^2.9.14",
-    "typescript": "~6.0.3"
+    "typescript": "~7.0.2"
   },
-  "packageManager": "pnpm@8.15.6",
-  "name": "vithos",
   "lint-staged": {
     "*.{js,mjs,cjs,ts,tsx,mts,cts,jsx,json,css,scss,md,mdx,yml,yaml,html}": [
-      "prettier --write"
+      "oxfmt --no-error-on-unmatched-pattern"
     ]
   },
+  "packageManager": "pnpm@8.15.6",
   "pnpm": {
     "overrides": {
       "kysely": "0.28.17"

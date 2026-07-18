@@ -45,11 +45,7 @@ worker.use("*", async (c, next) => {
 worker.route("/", app);
 
 export default {
-  fetch(
-    request: Request,
-    env: AppBindings,
-    _ctx: ExecutionContext,
-  ): Response | Promise<Response> {
+  fetch(request: Request, env: AppBindings, _ctx: ExecutionContext): Response | Promise<Response> {
     if (nonEmpty(env.BETTER_AUTH_SECRET)) {
       process.env.BETTER_AUTH_SECRET = env.BETTER_AUTH_SECRET;
     }
@@ -57,8 +53,7 @@ export default {
       process.env.BETTER_AUTH_URL = env.BETTER_AUTH_URL;
     }
 
-    const cs =
-      nonEmpty(env.DATABASE_URL) ?? nonEmpty(env.HYPERDRIVE?.connectionString);
+    const cs = nonEmpty(env.DATABASE_URL) ?? nonEmpty(env.HYPERDRIVE?.connectionString);
     if (!cs) {
       const headers = new Headers({ "Content-Type": "application/json" });
       setSecurityHeaders(headers);
