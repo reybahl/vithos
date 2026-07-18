@@ -50,6 +50,8 @@ Rename `@acme/*` package scopes when you fork. See **[DEPLOYMENT.md](./DEPLOYMEN
  openssl rand -base64 32
 ```
 
+`apps/worker/.env` configures the local Hyperdrive connection and Worker-only auth values. Root `.env` remains the Prisma CLI connection source.
+
 4. `pnpm install`
 5. `pnpm db:migrate`
 6. `pnpm dev` → [http://localhost:5173](http://localhost:5173)

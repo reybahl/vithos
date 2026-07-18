@@ -11,7 +11,6 @@ compatibility_flags = ["nodejs_compat", "nodejs_compat_populate_process_env"]
 [[hyperdrive]]
 binding = "HYPERDRIVE"
 id = "8c4dcf21a5d24475a98a549dd4e9eb47"
-localConnectionString = "postgres://postgres:supersecret@127.0.0.1:5432/local"
 
 [assets]
 not_found_handling = "single-page-application"
