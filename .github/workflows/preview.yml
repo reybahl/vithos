@@ -61,8 +61,8 @@ jobs:
           DATABASE_URL: ${{ steps.neon.outputs.db_url }}
         run: pnpm db:migrate:deploy
 
-      - name: Build web
-        run: pnpm --filter web build
+      - name: Build Worker and SPA
+        run: pnpm --filter worker build
 
       - name: Upload preview Worker (SPA + API)
         id: worker_initial

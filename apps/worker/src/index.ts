@@ -22,6 +22,7 @@ function setSecurityHeaders(headers: Headers) {
 }
 
 type AppBindings = {
+  BETTER_AUTH_SECRET?: string;
   BETTER_AUTH_URL?: string;
   /** Preview CI only — direct Neon branch URL. Production uses Hyperdrive. */
   DATABASE_URL?: string;
@@ -49,6 +50,9 @@ export default {
     env: AppBindings,
     _ctx: ExecutionContext,
   ): Response | Promise<Response> {
+    if (nonEmpty(env.BETTER_AUTH_SECRET)) {
+      process.env.BETTER_AUTH_SECRET = env.BETTER_AUTH_SECRET;
+    }
     if (nonEmpty(env.BETTER_AUTH_URL)) {
       process.env.BETTER_AUTH_URL = env.BETTER_AUTH_URL;
     }

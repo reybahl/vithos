@@ -56,8 +56,8 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - name: Build web
-        run: pnpm --filter web build
+      - name: Build Worker and SPA
+        run: pnpm --filter worker build
       - name: Deploy Cloudflare Worker
         uses: cloudflare/wrangler-action@v3
         with:

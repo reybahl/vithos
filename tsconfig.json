@@ -6,8 +6,6 @@
     { "path": "./packages/db" },
     { "path": "./packages/hono-app" },
     { "path": "./packages/ui" },
-    { "path": "./apps/api" },
-    { "path": "./apps/worker" },
-    { "path": "./apps/web" }
+    { "path": "./apps/worker" }
   ]
 }

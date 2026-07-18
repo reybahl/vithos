@@ -4,7 +4,7 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-@source "../../../apps/web/src/**/*.{ts,tsx}";
+@source "../../../apps/worker/src/client/src/**/*.{ts,tsx}";
 @source "../../src/**/*.{ts,tsx}";
 
 @theme inline {
