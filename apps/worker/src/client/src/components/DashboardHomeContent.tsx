@@ -60,9 +60,6 @@ export function DashboardHomeContent() {
       toast.error("Could not update the counter.");
     },
     onSettled: () => {
-      // A success response contains the count at the instant that one request
-      // committed. With overlapping clicks, using it here can overwrite later
-      // optimistic increments. Reconcile once every local increment has settled.
       if (
         isLastCounterMutation(
           queryClient.isMutating({
