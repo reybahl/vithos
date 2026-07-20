@@ -4,8 +4,6 @@ import { v7 as uuidv7 } from "uuid";
 
 import { db } from "@acme/db";
 
-import { hashPassword, verifyPassword } from "./password";
-
 function requireEnv(name: string): string {
   const value = process.env[name]?.trim();
   if (!value) {
@@ -36,10 +34,6 @@ function createAuth() {
     },
     emailAndPassword: {
       enabled: true,
-      password: {
-        hash: hashPassword,
-        verify: verifyPassword,
-      },
     },
   });
 }
