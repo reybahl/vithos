@@ -13,8 +13,8 @@
   },
   "dependencies": {
     "@acme/db": "workspace:*",
-    "@better-auth/kysely-adapter": "^1.6.11",
-    "better-auth": "^1.6.11",
+    "@better-auth/kysely-adapter": "^1.6.23",
+    "better-auth": "^1.6.23",
     "uuid": "^14.0.0"
   },
   "devDependencies": {
